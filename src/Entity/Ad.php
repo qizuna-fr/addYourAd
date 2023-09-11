@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\AdRepository;
+use InvalidArgumentException;
 use Doctrine\DBAL\Types\Types;
+use App\Repository\AdRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AdRepository::class)]
@@ -32,6 +33,13 @@ class Ad
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $link = null;
 
+    public function __construct()
+    {
+        if ($this->endedAt < $this->startedAt) {
+            throw new InvalidArgumentException("bad value");
+        }
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +52,8 @@ class Ad
 
     public function setStartedAt(\DateTimeImmutable $startedAt): static
     {
+        $this->ifSetableAt($startedAt, $this->getEndedAt());
+
         $this->startedAt = $startedAt;
 
         return $this;
@@ -56,6 +66,8 @@ class Ad
 
     public function setEndedAt(\DateTimeImmutable $endedAt): static
     {
+        $this->ifSetableAt($this->getStartedAt(), $endedAt);
+
         $this->endedAt = $endedAt;
 
         return $this;
@@ -107,5 +119,12 @@ class Ad
         $this->link = $link;
 
         return $this;
+    }
+
+    public function ifSetableAt(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null)
+    {
+        if ($end != null && $start != null && $end < $start) {
+            throw new InvalidArgumentException("bad value");
+        }
     }
 }
