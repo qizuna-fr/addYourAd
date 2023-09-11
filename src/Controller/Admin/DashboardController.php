@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Ad;
 use App\Controller\Admin\AdCrudController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,6 +29,6 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToCrud('Ads', 'fa-solid fa-rectangle-ad', Session::class);
+        yield MenuItem::linkToCrud('Ads', 'fa-solid fa-rectangle-ad', Ad::class);
     }
 }
