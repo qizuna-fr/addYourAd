@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -11,7 +13,18 @@
 |
 */
 
-// uses(Tests\TestCase::class)->in('Feature');
+uses(WebTestCase::class)->beforeEach(function (){
+    $this->client = $this::createClient(["environment", "test"]);
+    $this->container = $this->client->getContainer();
+    // dd($this->container->get('validator'));
+    $this->validator = $this->container->get('validator');
+    })->in('Unit');
+
+uses(WebTestCase::class)->beforeEach(function (){
+    $this->client = $this::createClient(["environment", "test"]);
+    $this->container = $this->client->getContainer();
+    // dd($this->container);
+    })->in('Integration', 'e2e');
 
 /*
 |--------------------------------------------------------------------------
