@@ -21,10 +21,28 @@ class Ad
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Assert\NotBlank(message: 'Veuiller selectionner une date de début.')]
+    #[Assert\When(
+        expression: 'this.getEndedAt() != null',
+        constraints: [
+            new Assert\LessThan(
+                propertyPath: "endedAt",
+                message: "The ending date should be before the starting date"
+            )
+        ]
+    )]
     private ?\DateTimeImmutable $startedAt = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Assert\NotBlank(message: 'Veuiller selectionner une date de fin.')]
+    #[Assert\When(
+        expression: 'this.getStartedAt() != null',
+        constraints: [
+            new Assert\GreaterThan(
+                propertyPath: "startedAt",
+                message: "The ending date should be after the starting date"
+            )
+        ]
+    )]
     private ?\DateTimeImmutable $endedAt = null;
 
     #[ORM\Column(type: 'integer')]
@@ -64,10 +82,9 @@ class Ad
         return $this->startedAt;
     }
 
+    
     public function setStartedAt(\DateTimeImmutable $startedAt): static
     {
-        $this->ifSetableAt($startedAt, $this->getEndedAt());
-
         $this->startedAt = $startedAt;
 
         return $this;
@@ -78,10 +95,9 @@ class Ad
         return $this->endedAt;
     }
 
+    
     public function setEndedAt(\DateTimeImmutable $endedAt): static
     {
-        $this->ifSetableAt($this->getStartedAt(), $endedAt);
-
         $this->endedAt = $endedAt;
 
         return $this;
@@ -169,12 +185,5 @@ class Ad
     public function getImageSize(): ?int
     {
         return $this->imageSize;
-    }
-
-    public function ifSetableAt(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null)
-    {
-        if ($end != null && $start != null && $end < $start) {
-            throw new InvalidArgumentException("bad value");
-        }
     }
 }
