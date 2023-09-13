@@ -192,6 +192,18 @@ class Ad
         return $this->UpdatedAt;
     }
 
+    public function getAdCollection(): ?AdCollection
+    {
+        return $this->adCollection;
+    }
+
+    public function setAdCollection(?AdCollection $adCollection): static
+    {
+        $this->adCollection = $adCollection;
+
+        return $this;
+    }
+
     public function ifSetableAt(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null)
     {
         if ($end != null && $start != null && $end < $start) {
@@ -213,15 +225,7 @@ class Ad
         $this->views++;
     }
 
-    public function getAdCollection(): ?AdCollection
-    {
-        return $this->adCollection;
-    }
-
-    public function setAdCollection(?AdCollection $adCollection): static
-    {
-        $this->adCollection = $adCollection;
-
-        return $this;
+    public function isDisplayable(){
+        return $this->views < $this->weight;
     }
 }
