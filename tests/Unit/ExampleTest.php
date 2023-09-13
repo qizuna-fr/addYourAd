@@ -1,7 +1,6 @@
 <?php
 
 use App\Entity\Ad;
-use Symfony\Component\Validator\Constraints as Assert;
 
 it('should register a new ad', function () {
 
@@ -23,8 +22,6 @@ it('should not register an ad with a ended date that is before the started date'
 
     $ad->setStartedAt(new DateTimeImmutable('2023-12-03'));
     $ad->setEndedAt(new DateTimeImmutable('2023-11-16'));
-
-    // dd($ad->getEndedAt());
 
     expect($ad->getEndedAt())->toBeNull();
 });
