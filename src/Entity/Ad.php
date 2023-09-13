@@ -67,6 +67,9 @@ class Ad
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $link = null;
 
+    #[ORM\ManyToOne(inversedBy: 'ads')]
+    private ?Collection $collection = null;
+
     public function __construct()
     {
         $this->views = 0;
@@ -208,5 +211,17 @@ class Ad
     public function oneMoreView()
     {
         $this->views++;
+    }
+
+    public function getCollection(): ?Collection
+    {
+        return $this->collection;
+    }
+
+    public function setCollection(?Collection $collection): static
+    {
+        $this->collection = $collection;
+
+        return $this;
     }
 }
