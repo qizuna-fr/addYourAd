@@ -57,4 +57,29 @@ class AdCollection
 
         return $this;
     }
+
+    public function displayOneRandomly()
+    {
+        $rnd = rand(0, count($this->ads)-1);
+
+        if($this->ads[$rnd]->isDisplayable()){
+            $this->ads[$rnd]->incrementView();
+        } else {
+            $this->displayOneRandomly();
+        }
+
+    }
+    
+    public function getSequence(){
+
+        $sequence = [];
+        foreach ($this->ads as $ad){
+            for($i=0 ; $i<$ad->getWeight(); $i++){
+                $sequence[] = $ad;
+            }
+        }
+
+        return $sequence;
+
+    }
 }
