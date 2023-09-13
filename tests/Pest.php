@@ -24,7 +24,14 @@ uses(WebTestCase::class)->beforeEach(function (){
     $this->client = $this::createClient(["environment", "test"]);
     $this->container = $this->client->getContainer();
     // dd($this->container);
-    })->in('Integration', 'e2e');
+    })->in('Integration');
+    
+// uses(WebTestCase::class)->beforeEach(function (){
+//     $this->client = $this::createClient(["environment", "test"]);
+//     $this->container = $this->client->getContainer();
+//     dd($this->container);
+//     $this->adminUrlGenerator = $this->container->get('adminUrlGenerator');
+//     })->in('e2e');
 
 /*
 |--------------------------------------------------------------------------
