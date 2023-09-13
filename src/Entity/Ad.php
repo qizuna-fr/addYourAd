@@ -82,10 +82,10 @@ class Ad
         return $this->startedAt;
     }
 
-    
+
     public function setStartedAt(\DateTimeImmutable $startedAt): static
     {
-        $this->startedAt = $startedAt;
+        $this->startedAt = $this->setNull($startedAt, $this->ifSetableAt($startedAt, $this->getEndedAt()));
 
         return $this;
     }
@@ -95,10 +95,10 @@ class Ad
         return $this->endedAt;
     }
 
-    
+
     public function setEndedAt(\DateTimeImmutable $endedAt): static
     {
-        $this->endedAt = $endedAt;
+        $this->endedAt = $this->setNull($endedAt, $this->ifSetableAt($this->getStartedAt(), $endedAt));
 
         return $this;
     }
@@ -167,16 +167,6 @@ class Ad
         return $this->imageFile;
     }
 
-    public function setImageName(?string $imageName): void
-    {
-        $this->imageName = $imageName;
-    }
-
-    public function getImageName(): ?string
-    {
-        return $this->imageName;
-    }
-
     public function setImageSize(?int $imageSize): void
     {
         $this->imageSize = $imageSize;
@@ -185,5 +175,21 @@ class Ad
     public function getImageSize(): ?int
     {
         return $this->imageSize;
+    }
+
+    public function ifSetableAt(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null)
+    {
+        if ($end != null && $start != null && $end < $start) {
+            return false;
+        }
+        return true;
+    }
+
+    public function setNull(\DateTimeImmutable $date, $test = true)
+    {
+        if ($test == false) {
+            $date = null;
+        }
+        return $date;
     }
 }
