@@ -177,6 +177,18 @@ class Ad
         return $this->imageSize;
     }
 
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->UpdatedAt;
+    }
+
     public function ifSetableAt(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null)
     {
         if ($end != null && $start != null && $end < $start) {
@@ -191,5 +203,10 @@ class Ad
             $date = null;
         }
         return $date;
+    }
+
+    public function oneMoreView()
+    {
+        $this->views++;
     }
 }
