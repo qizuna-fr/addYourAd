@@ -68,7 +68,7 @@ class Ad
     private ?string $link = null;
 
     #[ORM\ManyToOne(inversedBy: 'ads')]
-    private ?Collection $collection = null;
+    private ?AdCollection $adCollection = null;
 
     public function __construct()
     {
@@ -213,14 +213,14 @@ class Ad
         $this->views++;
     }
 
-    public function getCollection(): ?Collection
+    public function getAdCollection(): ?AdCollection
     {
-        return $this->collection;
+        return $this->adCollection;
     }
 
-    public function setCollection(?Collection $collection): static
+    public function setAdCollection(?AdCollection $adCollection): static
     {
-        $this->collection = $collection;
+        $this->adCollection = $adCollection;
 
         return $this;
     }

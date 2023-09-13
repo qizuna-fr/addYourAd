@@ -2,20 +2,20 @@
 
 namespace App\Entity;
 
-use App\Repository\CollectionRepository;
+use App\Repository\AdCollectionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CollectionRepository::class)]
-class Collection
+#[ORM\Entity(repositoryClass: AdCollectionRepository::class)]
+class AdCollection
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToMany(mappedBy: 'collection', targetEntity: Ad::class)]
+    #[ORM\OneToMany(mappedBy: 'adCollection', targetEntity: Ad::class)]
     private Collection $ads;
 
     public function __construct()
@@ -40,7 +40,7 @@ class Collection
     {
         if (!$this->ads->contains($ad)) {
             $this->ads->add($ad);
-            $ad->setCollection($this);
+            $ad->setAdCollection($this);
         }
 
         return $this;
@@ -50,8 +50,8 @@ class Collection
     {
         if ($this->ads->removeElement($ad)) {
             // set the owning side to null (unless already changed)
-            if ($ad->getCollection() === $this) {
-                $ad->setCollection(null);
+            if ($ad->getAdCollection() === $this) {
+                $ad->setAdCollection(null);
             }
         }
 
