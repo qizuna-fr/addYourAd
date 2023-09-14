@@ -18,9 +18,6 @@ class AdCollection
     #[ORM\ManyToMany(targetEntity: Ad::class)]
     private Collection $ads;
 
-    // #[ORM\Column]
-    // private ?int $boucle = null;
-
     public function __construct()
     {
         $this->ads = new ArrayCollection();
@@ -56,76 +53,64 @@ class AdCollection
         return $this;
     }
 
-    // public function getBoucle(): ?int
-    // {
-    //     return $this->boucle;
-    // }
-
-    // public function setBoucle(int $boucle): static
-    // {
-    //     $this->boucle = $boucle;
-
-    //     return $this;
-    // }
-
     public function displayOneRandomly()
     {
 
         $ad = $this->pickAdRandomly();
-        // $allViews = $this->allViews();
-        // $allWeight = $this->allWeight();
 
-        
-        // if($allViews == $allWeight*$this->boucle)
-        // {
-        //     $this->oneMoreBoucle();
-        // }
-        if($ad->isDisplayable(/*$this->boucle*/)){
+        if ($this->aSegmentDone()) {
+            foreach ($this->ads as $anAd) {
+                $anAd->setViewToZero();
+            }
+        }
+        if ($ad->isDisplayable()) {
             $ad->oneMoreView();
+            $ad->actualViewInTotalView();
         } else {
             $this->displayOneRandomly();
         }
     }
-    
-    public function getSequence(){
+
+    public function getSequence()
+    {
 
         $sequence = [];
-        foreach ($this->ads as $ad){
-            for($i=0 ; $i<$ad->getWeight(); $i++){
+        foreach ($this->ads as $ad) {
+            for ($i = 0; $i < $ad->getWeight(); $i++) {
                 $sequence[] = $ad;
             }
         }
         return $sequence;
     }
 
-    // public function allViews(){
+    public function allViews()
+    {
 
-    //     $views = 0;
-    //     foreach ($this->ads as $ad){
-    //         $views+= $ad->getViews();
-    //     }
-    //     return $views;
-    // }
+        $views = 0;
+        foreach ($this->ads as $ad) {
+            $views += $ad->getViews();
+        }
+        return $views;
+    }
 
-    // public function allWeight(){
+    public function allWeight()
+    {
 
-    //     $weight = 0;
-    //     foreach ($this->ads as $ad){
-    //         $weight+= $ad->getWeight();
-    //     }
-    //     return $weight;
-    // }
+        $weight = 0;
+        foreach ($this->ads as $ad) {
+            $weight += $ad->getWeight();
+        }
+        return $weight;
+    }
 
-    // public function oneMoreBoucle()
-    // {
-    //     $this->boucle++;
-    // }
-
-    //  methode n'utilisant pas la sequence
+    public function aSegmentDone()
+    {
+        return $this->allViews() == $this->allWeight();
+    }
 
     public function pickAdRandomly()
     {
-        $rnd = rand(0, count($this->ads)-1);
+        $rnd = rand(0, count($this->ads) - 1);
 
         return $this->ads[$rnd];
     }
