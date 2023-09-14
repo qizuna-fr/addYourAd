@@ -2,7 +2,6 @@
 
 use App\Entity\Ad;
 use App\Entity\AdCollection;
-use App\Entity\AdCollection;
 
 it('should register a new ad', function () {
 
