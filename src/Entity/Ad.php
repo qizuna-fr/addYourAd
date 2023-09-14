@@ -67,9 +67,6 @@ class Ad
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $link = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ads')]
-    private ?AdCollection $adCollection = null;
-
     public function __construct()
     {
         $this->views = 0;
@@ -192,18 +189,6 @@ class Ad
         return $this->UpdatedAt;
     }
 
-    public function getAdCollection(): ?AdCollection
-    {
-        return $this->adCollection;
-    }
-
-    public function setAdCollection(?AdCollection $adCollection): static
-    {
-        $this->adCollection = $adCollection;
-
-        return $this;
-    }
-
     public function ifSetableAt(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null)
     {
         if ($end != null && $start != null && $end < $start) {
@@ -225,7 +210,8 @@ class Ad
         $this->views++;
     }
 
-    public function isDisplayable(){
+    public function isDisplayable()
+    {
         return $this->views < $this->weight;
     }
 }
