@@ -15,7 +15,7 @@ class AdCollection
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToMany(mappedBy: 'adCollection', targetEntity: Ad::class)]
+    #[ORM\ManyToMany(targetEntity: Ad::class)]
     private Collection $ads;
 
     public function __construct()
@@ -40,7 +40,6 @@ class AdCollection
     {
         if (!$this->ads->contains($ad)) {
             $this->ads->add($ad);
-            $ad->setAdCollection($this);
         }
 
         return $this;
@@ -48,26 +47,21 @@ class AdCollection
 
     public function removeAd(Ad $ad): static
     {
-        if ($this->ads->removeElement($ad)) {
-            // set the owning side to null (unless already changed)
-            if ($ad->getAdCollection() === $this) {
-                $ad->setAdCollection(null);
-            }
-        }
+        $this->ads->removeElement($ad);
 
         return $this;
     }
 
     public function displayOneRandomly()
     {
-        $rnd = rand(0, count($this->ads)-1);
 
-        if($this->ads[$rnd]->isDisplayable()){
-            $this->ads[$rnd]->incrementView();
+        $ad = $this->pickAdRandomly();
+        
+        if($ad->isDisplayable()){
+            $ad->oneMoreView();
         } else {
             $this->displayOneRandomly();
         }
-
     }
     
     public function getSequence(){
@@ -81,5 +75,12 @@ class AdCollection
 
         return $sequence;
 
+    }
+
+    public function pickAdRandomly()
+    {
+        $rnd = rand(0, count($this->ads)-1);
+
+        return $this->ads[$rnd];
     }
 }
