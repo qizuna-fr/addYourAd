@@ -131,8 +131,10 @@ it('should count views over multiple sequences', function () {
         $collection->displayOneRandomly();
     }
 
-    expect($collection->getAds()[0]->getViews())->toBe(6);
+    expect($collection->getAds()[0]->getTotalViews())->toBe(6);
 
 });
 
-// should reset sequences count after complete sequence
+it('should reset sequences count after complete sequence', function (){
+    
+});
