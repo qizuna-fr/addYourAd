@@ -12,10 +12,9 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         for ($count = 0; $count < 10; $count++) {
-            $ad = new Ad;
+            $ad = new Ad();
 
             $ad->setWeight(3);
-            $ad->setViews(0);
             $ad->setImageSize(7964);
             $ad->setStartedAt(new DateTimeImmutable('2023-08-31'));
             $ad->setEndedAt(new DateTimeImmutable('2023-10-31'));
