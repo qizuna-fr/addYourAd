@@ -67,9 +67,13 @@ class Ad
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $link = null;
 
+    #[ORM\Column]
+    private ?int $totalViews = null;
+
     public function __construct()
     {
         $this->views = 0;
+        $this->totalViews = 0;
     }
 
     public function getId(): ?int
@@ -151,6 +155,11 @@ class Ad
         return $this;
     }
 
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
     public function setImageFile(?File $imageFile = null): void
     {
         $this->imageFile = $imageFile;
@@ -162,9 +171,9 @@ class Ad
         }
     }
 
-    public function getImageFile(): ?File
+    public function getImageSize(): ?int
     {
-        return $this->imageFile;
+        return $this->imageSize;
     }
 
     public function setImageSize(?int $imageSize): void
@@ -172,9 +181,9 @@ class Ad
         $this->imageSize = $imageSize;
     }
 
-    public function getImageSize(): ?int
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->imageSize;
+        return $this->updatedAt;
     }
 
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
@@ -184,9 +193,16 @@ class Ad
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getTotalViews(): ?int
     {
-        return $this->UpdatedAt;
+        return $this->totalViews;
+    }
+
+    public function setTotalViews(int $totalViews): static
+    {
+        $this->totalViews = $totalViews;
+
+        return $this;
     }
 
     public function ifSetableAt(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null)
@@ -210,8 +226,18 @@ class Ad
         $this->views++;
     }
 
-    public function isDisplayable(/*int $coef*/)
+    public function actualViewInTotalView()
     {
-        return $this->views < $this->weight/**$coef*/;
+        $this->totalViews += $this->views;
+    }
+
+    public function setViewToZero()
+    {
+        $this->views = 0;
+    }
+
+    public function isDisplayable()
+    {
+        return $this->views < $this->weight;
     }
 }
