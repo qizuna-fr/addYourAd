@@ -18,9 +18,13 @@ class AdCollection
     #[ORM\ManyToMany(targetEntity: Ad::class)]
     private Collection $ads;
 
+    // #[ORM\Column]
+    // private ?int $boucle = null;
+
     public function __construct()
     {
         $this->ads = new ArrayCollection();
+        // $this->boucle = 1;
     }
 
     public function getId(): ?int
@@ -52,12 +56,31 @@ class AdCollection
         return $this;
     }
 
+    // public function getBoucle(): ?int
+    // {
+    //     return $this->boucle;
+    // }
+
+    // public function setBoucle(int $boucle): static
+    // {
+    //     $this->boucle = $boucle;
+
+    //     return $this;
+    // }
+
     public function displayOneRandomly()
     {
 
         $ad = $this->pickAdRandomly();
+        // $allViews = $this->allViews();
+        // $allWeight = $this->allWeight();
+
         
-        if($ad->isDisplayable()){
+        // if($allViews == $allWeight*$this->boucle)
+        // {
+        //     $this->oneMoreBoucle();
+        // }
+        if($ad->isDisplayable(/*$this->boucle*/)){
             $ad->oneMoreView();
         } else {
             $this->displayOneRandomly();
@@ -72,10 +95,33 @@ class AdCollection
                 $sequence[] = $ad;
             }
         }
-
         return $sequence;
-
     }
+
+    // public function allViews(){
+
+    //     $views = 0;
+    //     foreach ($this->ads as $ad){
+    //         $views+= $ad->getViews();
+    //     }
+    //     return $views;
+    // }
+
+    // public function allWeight(){
+
+    //     $weight = 0;
+    //     foreach ($this->ads as $ad){
+    //         $weight+= $ad->getWeight();
+    //     }
+    //     return $weight;
+    // }
+
+    // public function oneMoreBoucle()
+    // {
+    //     $this->boucle++;
+    // }
+
+    //  methode n'utilisant pas la sequence
 
     public function pickAdRandomly()
     {

@@ -210,8 +210,8 @@ class Ad
         $this->views++;
     }
 
-    public function isDisplayable()
+    public function isDisplayable(/*int $coef*/)
     {
-        return $this->views < $this->weight;
+        return $this->views < $this->weight/**$coef*/;
     }
 }
