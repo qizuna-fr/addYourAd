@@ -107,7 +107,7 @@ it('should display randomly each ad of collection n times depending his weight',
     // je dois obtenir que le nombre d'affichage de chaque pub corresponde a sont poids
 
     for ($i = 0; $i < 6; $i++) {
-        $collection->displayOneRandomly($collection);
+        $collection->displayOneRandomly();
     }
 
     expect($collection->getAds()[0]->getViews())->toBe(1);
@@ -115,20 +115,24 @@ it('should display randomly each ad of collection n times depending his weight',
     expect($collection->getAds()[2]->getViews())->toBe(3);
 });
 
-// it('should count views over multiple sequences', function () {
+it('should count views over multiple sequences', function () {
 
-//     // si on affiche une pub , on compte le nombre d'affichages dans la collection
-//     // mais il faut aussi compter le nombre d'affichages total
+    // si on affiche une pub , on compte le nombre d'affichages dans la collection
+    // mais il faut aussi compter le nombre d'affichages total
 
-//     $collection = new AdCollection();
-//     $collection->addAd(new Ad(1));
+    $collection = new AdCollection();
 
-//     for ($i = 0; $i < 6; $i++) {
-//         $collection->displayOneRandomly();
-//     }
+    $ad1 = new Ad();
+    $ad1->setWeight(1);
 
-//     expect($collection->getAds()[0]->getTotalViews())->toBe(6);
+    $collection->addAd($ad1);
 
-// });
+    for ($i = 0; $i < 6; $i++) {
+        $collection->displayOneRandomly();
+    }
+
+    expect($collection->getAds()[0]->getViews())->toBe(6);
+
+});
 
 // should reset sequences count after complete sequence
