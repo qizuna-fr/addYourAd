@@ -135,6 +135,22 @@ it('should count views over multiple sequences', function () {
 
 });
 
-it('should reset sequences count after complete sequence', function (){
+it('should return an ads', function(){
     
+    $collection = new AdCollection();
+
+    $ad1 = new Ad();
+    $ad1->setWeight(1);
+    $ad2 = new Ad();
+    $ad2->setWeight(2);
+    $ad3 = new Ad();
+    $ad3->setWeight(3);
+
+    $collection->addAd($ad1);
+    $collection->addAd($ad2);
+    $collection->addAd($ad3);
+
+    $ad = $collection->displayOneRandomly();
+
+    expect($ad)->toBeInstanceOf(Ad::class);
 });
