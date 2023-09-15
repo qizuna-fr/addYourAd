@@ -66,6 +66,7 @@ class AdCollection
         if ($ad->isDisplayable()) {
             $ad->oneMoreView();
             $ad->actualViewInTotalView();
+            return $ad;
         } else {
             $this->displayOneRandomly();
         }
