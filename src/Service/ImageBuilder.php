@@ -11,4 +11,9 @@ class ImageBuilder
         $path = 'img/uploads/';
         return $imagePath = $path.$ad->getImage();
     }
+
+    public function makeBase64ToImage(Ad $ad)
+    {
+        return base64_decode($ad->getImageBase64());
+    }
 }
