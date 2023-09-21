@@ -70,6 +70,9 @@ class Ad
     #[ORM\Column]
     private ?int $totalViews = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $imageBase64 = null;
+
     public function __construct()
     {
         $this->views = 0;
@@ -162,7 +165,8 @@ class Ad
 
     public function setImageFile(?File $imageFile = null): void
     {
-        $this->imageFile = $imageFile;
+        $this->imageFile = $imageFile; //base64_encode($imageFile)
+        $this->imageToBase64($imageFile);
 
         if (null !== $imageFile) {
             // It is required that at least one field changes if you are using doctrine
@@ -205,6 +209,18 @@ class Ad
         return $this;
     }
 
+    public function getImageBase64(): ?string
+    {
+        return $this->imageBase64;
+    }
+
+    public function setImageBase64(?string $imageBase64): static
+    {
+        $this->imageBase64 = $imageBase64;
+
+        return $this;
+    }
+
     public function ifSetableAt(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null)
     {
         if ($end != null && $start != null && $end < $start) {
@@ -239,5 +255,10 @@ class Ad
     public function isDisplayable()
     {
         return $this->views < $this->weight;
+    }
+
+    public function imageToBase64(?File $imageFile = null)
+    {
+        $this->setImageBase64(base64_encode(file_get_contents($imageFile)));
     }
 }
