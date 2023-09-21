@@ -7,12 +7,12 @@
         {% set weight = ad.weight %}
         {% if weight == 1 %}
                 <figure>
-                    <img src="{{ @uploaded/ad.image }}" alt="">
+                    <img src="{{ asset('img/uploads/') }}{{ ad.image }}" alt="">
                 </figure>
         {% else %}
             {% for i in 1 .. weight %}
                 <figure>
-                    <img src="{{ @uploaded/ad.image }}" alt="">
+                    <img src="{{ asset('img/uploads/') }}{{ ad.image }}" alt="">
                 </figure>
             {% endfor %}
         {% endif %}
