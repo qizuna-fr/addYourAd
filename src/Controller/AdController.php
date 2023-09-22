@@ -30,7 +30,7 @@ class AdController extends AbstractController
     #[Route('/link', name: 'image_link')]
     public function imageLink()
     {
-        return new JsonResponse(['ad' => $this->renderView('api/link.html.twig')], Response::HTTP_OK);
+        return new JsonResponse(['ad' => $this->renderView('api/link.html.twig',['link' => 'lien','image' => 'img'])], Response::HTTP_OK);
     }
 
     #[Route('/image/{id}', name: 'app_image')]
