@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\AdCollection;
 use App\Service\JsonBuilder;
 use App\Service\ImageBuilder;
 use App\Repository\AdRepository;
@@ -13,6 +14,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdController extends AbstractController
 {
+    #[Route('/random', name: 'app_random')]
+    public function randomAds(JsonBuilder $jsonBuilder, AdRepository $adRepository)
+    {
+        $ads = $adRepository->findAll();
+        $collection = new AdCollection();
+        foreach($ads as $ad)
+        {
+            $collection->addAd($ad);
+        }
+        $show = $collection->displayOneRandomly();
+        return new JsonResponse(['ad' => $this->renderView('api/link.html.twig',['link' => $show->getLink(),'image' => $show->getImageBase64()])], Response::HTTP_OK);
+    }
+
     #[Route('/ads', name: 'app_ads')]
     public function getTheAds(JsonBuilder $jsonBuilder, AdRepository $adRepository)
     {
