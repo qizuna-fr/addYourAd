@@ -73,10 +73,14 @@ class Ad
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $imageBase64 = null;
 
+    #[ORM\Column]
+    private ?int $click = null;
+
     public function __construct()
     {
         $this->views = 0;
         $this->totalViews = 0;
+        $this->click = 0;
     }
 
     public function getId(): ?int
@@ -217,6 +221,18 @@ class Ad
     public function setImageBase64(?string $imageBase64): static
     {
         $this->imageBase64 = $imageBase64;
+
+        return $this;
+    }
+
+    public function getClick(): ?int
+    {
+        return $this->click;
+    }
+
+    public function setClick(int $click): static
+    {
+        $this->click = $click;
 
         return $this;
     }
