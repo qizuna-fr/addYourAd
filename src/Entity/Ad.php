@@ -277,4 +277,9 @@ class Ad
     {
         $this->setImageBase64(base64_encode(file_get_contents($imageFile)));
     }
+
+    public function oneMoreClick()
+    {
+        $this->click++;
+    }
 }
