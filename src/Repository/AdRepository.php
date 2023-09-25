@@ -31,6 +31,7 @@ class AdRepository extends ServiceEntityRepository
             ->andWhere('a.endedAt > :today')
             ->andWhere('a.startedAt < :today')
             ->setParameter('today', $now)
+            ->orderBy('a.totalViews / a.weight', 'ASC') // to retrive the one that have the less view compared to their weight
             ->getQuery()
             ->getResult()
         ;
