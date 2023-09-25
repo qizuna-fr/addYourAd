@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdController extends AbstractController
@@ -24,8 +25,10 @@ class AdController extends AbstractController
             $collection->addAd($ad);
         }
         $show = $collection->displayOneRandomly();
-        return new JsonResponse(['ad' => $this->renderView('api/link.html.twig',['link' => $show->getLink(),'image' => $show->getImageBase64()])], Response::HTTP_OK);
+        return new JsonResponse(['ad' => ['link' => 'https://127.0.0.1:8000/lien/'.$show->getId(),'image' => 'https://127.0.0.1:8000/base64/'.$show->getId()]], Response::HTTP_OK);
     }
+
+
 
     #[Route('/ads', name: 'app_ads')]
     public function getTheAds(JsonBuilder $jsonBuilder, AdRepository $adRepository)
@@ -73,6 +76,21 @@ class AdController extends AbstractController
                 'Content-Type' => 'image/png'
             ]
         );
+    }
+
+    #[Route('/lien/{id}', name: 'image_lien')]
+    public function imageLien(Request $request, AdRepository $adRepository)
+    {
+        $ad = $adRepository->find($request->get('id'));
+        if($ad->getLink() != null)
+        {
+            $ad->oneMoreClick();
+            return new RedirectResponse($ad->getLink());
+        }
+        else
+        {
+            return null;
+        }
     }
 
     #[Route('/ad', name: 'app_ad')]
