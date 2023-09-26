@@ -69,6 +69,7 @@ class AdCollection
             return $ad;
         } else {
             $this->displayOneRandomly();
+            return $ad;
         }
     }
 
