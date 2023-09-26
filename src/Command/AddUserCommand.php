@@ -22,30 +22,30 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 )]
 class AddUserCommand extends Command
 {
-    private $entityManager;
-    private $passwordEncoder;
+    // private $entityManager;
+    // private $passwordEncoder;
 
-    public function __construct(private UserManager $userManager)
-    {
-        parent::__construct();
-    }
+    // public function __construct(private UserManager $userManager)
+    // {
+    //     parent::__construct();
+    // }
 
-    protected function configure(): void
-    {
-        $this
-            ->setName('app:add-user')
-            ->setDescription('Add a new user')
-            ->addArgument('email', InputArgument::REQUIRED, 'your Email :')
-            ->addArgument('password', InputArgument::REQUIRED, 'your Password :')
-        ;
-    }
+    // protected function configure(): void
+    // {
+    //     $this
+    //         ->setName('app:add-user')
+    //         ->setDescription('Add a new user')
+    //         ->addArgument('email', InputArgument::REQUIRED, 'your Email :')
+    //         ->addArgument('password', InputArgument::REQUIRED, 'your Password :')
+    //     ;
+    // }
 
-    protected function execute(InputInterface $input, OutputInterface $output, UserPasswordHasherInterface $passwordHasher): int
-    {
-        $this->userManager->create($input->getArgument('email'), $input->getArgument('password'), $passwordHasher);
+    // protected function execute(InputInterface $input, OutputInterface $output, UserPasswordHasherInterface $passwordHasher): int
+    // {
+    //     $this->userManager->create($input->getArgument('email'), $input->getArgument('password'), $passwordHasher);
 
-        $output->writeln('User added successfully.');
+    //     $output->writeln('User added successfully.');
 
-        return Command::SUCCESS;
-    }
+    //     return Command::SUCCESS;
+    // }
 }
