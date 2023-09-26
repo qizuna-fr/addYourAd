@@ -89,6 +89,10 @@ class AdController extends AbstractController
     public function base64(Request $request, AdRepository $adRepository, ImageBuilder $imageBuilder)
     {
         $ad = $adRepository->find($request->get('id'));
+        if ($ad === null){
+            return new Response(null, Response::HTTP_NOT_FOUND );
+        }
+
         return new Response
         (
             $imageBuilder->makeBase64ToImage($ad),
@@ -103,14 +107,15 @@ class AdController extends AbstractController
     public function imageLien(Request $request, AdRepository $adRepository, EntityManagerInterface $entityManager)
     {
         $ad = $adRepository->find($request->get('id'));
-        if ($ad->getLink() != null) {
-            $ad->oneMoreClick();
-            $entityManager->persist($ad);
-            $entityManager->flush();
-            return new RedirectResponse($ad->getLink());
-        } else {
-            return null;
+        if ($ad === null){
+            return new Response(null, Response::HTTP_NOT_FOUND );
         }
+
+        $ad->oneMoreClick();
+        $entityManager->persist($ad);
+        $entityManager->flush();
+
+        return new RedirectResponse($ad->getLink());
     }
 
     #[Route('/ad', name: 'app_ad')]
