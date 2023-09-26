@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\AdCollection;
 use App\Service\JsonBuilder;
 use App\Service\ImageBuilder;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AdRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdController extends AbstractController
 {
     #[Route('/random', name: 'app_random')]
-    public function randomAds(JsonBuilder $jsonBuilder, AdRepository $adRepository, EntityManager $entityManager)
+    public function randomAds(JsonBuilder $jsonBuilder, AdRepository $adRepository, EntityManagerInterface $entityManager)
     {
         $ads = $adRepository->findAll();
         $collection = new AdCollection();
