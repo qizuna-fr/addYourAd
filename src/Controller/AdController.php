@@ -83,7 +83,7 @@ class AdController extends AbstractController
     }
 
     #[Route('/lien/{id}', name: 'image_lien')]
-    public function imageLien(Request $request, AdRepository $adRepository, EntityManager $entityManager)
+    public function imageLien(Request $request, AdRepository $adRepository, EntityManagerInterface $entityManager)
     {
         $ad = $adRepository->find($request->get('id'));
         if($ad->getLink() != null)
