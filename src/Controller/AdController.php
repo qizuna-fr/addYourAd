@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\AdCollection;
 use App\Service\JsonBuilder;
 use App\Service\ImageBuilder;
+use Doctrine\ORM\EntityManager;
 use App\Repository\AdRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdController extends AbstractController
 {
     #[Route('/random', name: 'app_random')]
-    public function randomAds(JsonBuilder $jsonBuilder, AdRepository $adRepository)
+    public function randomAds(JsonBuilder $jsonBuilder, AdRepository $adRepository, EntityManager $entityManager)
     {
         $ads = $adRepository->findAll();
         $collection = new AdCollection();
@@ -25,6 +26,8 @@ class AdController extends AbstractController
             $collection->addAd($ad);
         }
         $show = $collection->displayOneRandomly();
+        $entityManager->persist($show);
+        $entityManager->flush();
         return new JsonResponse(['ad' => ['link' => 'https://127.0.0.1:8000/lien/'.$show->getId(),'image' => 'https://127.0.0.1:8000/base64/'.$show->getId()]], Response::HTTP_OK);
     }
 
@@ -79,12 +82,14 @@ class AdController extends AbstractController
     }
 
     #[Route('/lien/{id}', name: 'image_lien')]
-    public function imageLien(Request $request, AdRepository $adRepository)
+    public function imageLien(Request $request, AdRepository $adRepository, EntityManager $entityManager)
     {
         $ad = $adRepository->find($request->get('id'));
         if($ad->getLink() != null)
         {
             $ad->oneMoreClick();
+            $entityManager->persist($ad);
+            $entityManager->flush();
             return new RedirectResponse($ad->getLink());
         }
         else
