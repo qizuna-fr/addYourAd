@@ -85,7 +85,7 @@ class AdController extends AbstractController
         );
     }
 
-    #[Route('/base64/{id}', name: 'app_base64')]
+    #[Route('/base64/{id}', name: 'app_base64' , schemes: ['https'])]
     public function base64(Request $request, AdRepository $adRepository, ImageBuilder $imageBuilder)
     {
         $ad = $adRepository->find($request->get('id'));
@@ -99,7 +99,7 @@ class AdController extends AbstractController
         );
     }
 
-    #[Route('/lien/{id}', name: 'image_lien')]
+    #[Route('/lien/{id}', name: 'image_lien' , schemes: ['https'])]
     public function imageLien(Request $request, AdRepository $adRepository, EntityManagerInterface $entityManager)
     {
         $ad = $adRepository->find($request->get('id'));
