@@ -18,20 +18,36 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdController extends AbstractController
 {
     #[Route('/random', name: 'app_random')]
-    public function randomAds(JsonBuilder $jsonBuilder, AdRepository $adRepository, EntityManagerInterface $entityManager)
-    {
+    public function randomAds(
+        JsonBuilder $jsonBuilder,
+        AdRepository $adRepository,
+        EntityManagerInterface $entityManager
+    ) {
         $ads = $adRepository->findAll();
         $collection = new AdCollection();
-        foreach($ads as $ad)
-        {
+        foreach ($ads as $ad) {
             $collection->addAd($ad);
         }
         $show = $collection->displayOneRandomly();
         $entityManager->persist($show);
         $entityManager->flush();
-        return new JsonResponse(['ad' => ['link' => $this->generateUrl('image_lien', ['id' => $show->getId()], UrlGeneratorInterface::ABSOLUTE_URL),'image' => $this->generateUrl('app_base64', ['id' => $show->getId()], UrlGeneratorInterface::ABSOLUTE_URL)]], Response::HTTP_OK);
+        return new JsonResponse(
+            [
+                'ad' => [
+                    'link' => $this->generateUrl(
+                        'image_lien',
+                        ['id' => $show->getId()],
+                        UrlGeneratorInterface::ABSOLUTE_URL
+                    ),
+                    'image' => $this->generateUrl(
+                        'app_base64',
+                        ['id' => $show->getId()],
+                        UrlGeneratorInterface::ABSOLUTE_URL
+                    ),
+                ],
+            ], Response::HTTP_OK
+        );
     }
-
 
 
     #[Route('/ads', name: 'app_ads')]
@@ -45,13 +61,14 @@ class AdController extends AbstractController
     public function getTheAd(Request $request, AdRepository $adRepository)
     {
         $ad = $adRepository->find($request->get('id'));
-        return new JsonResponse(['url' => $ad->getImage() , 'lien' => $ad->getLink()], Response::HTTP_OK);
+        return new JsonResponse(['url' => $ad->getImage(), 'lien' => $ad->getLink()], Response::HTTP_OK);
     }
 
     #[Route('/link', name: 'image_link')]
     public function imageLink()
     {
-        return new JsonResponse(['ad' => $this->renderView('api/link.html.twig',['link' => 'lien','image' => 'img'])], Response::HTTP_OK);
+        return new JsonResponse(['ad' => $this->renderView('api/link.html.twig', ['link' => 'lien', 'image' => 'img'])],
+                                Response::HTTP_OK);
     }
 
     #[Route('/image/{id}', name: 'app_image')]
@@ -63,7 +80,7 @@ class AdController extends AbstractController
             file_get_contents($imageBuilder->makeImage($ad)),
             Response::HTTP_OK,
             [
-                'Content-Type' => 'image/png'
+                'Content-Type' => 'image/png',
             ]
         );
     }
@@ -77,7 +94,7 @@ class AdController extends AbstractController
             $imageBuilder->makeBase64ToImage($ad),
             Response::HTTP_OK,
             [
-                'Content-Type' => 'image/png'
+                'Content-Type' => 'image/png',
             ]
         );
     }
@@ -86,15 +103,12 @@ class AdController extends AbstractController
     public function imageLien(Request $request, AdRepository $adRepository, EntityManagerInterface $entityManager)
     {
         $ad = $adRepository->find($request->get('id'));
-        if($ad->getLink() != null)
-        {
+        if ($ad->getLink() != null) {
             $ad->oneMoreClick();
             $entityManager->persist($ad);
             $entityManager->flush();
             return new RedirectResponse($ad->getLink());
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
