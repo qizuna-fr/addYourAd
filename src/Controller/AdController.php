@@ -5,13 +5,14 @@ namespace App\Controller;
 use App\Entity\AdCollection;
 use App\Service\JsonBuilder;
 use App\Service\ImageBuilder;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AdRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdController extends AbstractController
@@ -28,7 +29,7 @@ class AdController extends AbstractController
         $show = $collection->displayOneRandomly();
         $entityManager->persist($show);
         $entityManager->flush();
-        return new JsonResponse(['ad' => ['link' => 'https://127.0.0.1:8000/lien/'.$show->getId(),'image' => 'https://127.0.0.1:8000/base64/'.$show->getId()]], Response::HTTP_OK);
+        return new JsonResponse(['ad' => ['link' => $this->generateUrl('image_lien', ['id' => $show->getId()], UrlGeneratorInterface::ABSOLUTE_URL),'image' => $this->generateUrl('app_base64', ['id' => $show->getId()], UrlGeneratorInterface::ABSOLUTE_URL)]], Response::HTTP_OK);
     }
 
 
