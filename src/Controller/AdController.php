@@ -18,7 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdController extends AbstractController
 {
     #[Route('/api/ad/random', name: 'app_random')]
-    #[Route('/api/ad/random', name: 'app_random')]
     public function randomAds(
         JsonBuilder $jsonBuilder,
         AdRepository $adRepository,
@@ -105,7 +104,6 @@ class AdController extends AbstractController
 //    }
 
     #[Route('/api/ad/image/{id}', name: 'app_base64' , schemes: ['https'])]
-    #[Route('/api/ad/image/{id}', name: 'app_base64' , schemes: ['https'])]
     public function base64(Request $request, AdRepository $adRepository, ImageBuilder $imageBuilder)
     {
         $ad = $adRepository->find($request->get('id'));
@@ -127,7 +125,6 @@ class AdController extends AbstractController
         );
     }
 
-    #[Route('api/ad/link/{id}', name: 'image_lien' , schemes: ['https'])]
     #[Route('api/ad/link/{id}', name: 'image_lien' , schemes: ['https'])]
     public function imageLien(Request $request, AdRepository $adRepository, EntityManagerInterface $entityManager)
     {
