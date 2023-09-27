@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdController extends AbstractController
 {
     #[Route('/api/ad/random', name: 'app_random')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function randomAds(
         JsonBuilder $jsonBuilder,
         AdRepository $adRepository,
