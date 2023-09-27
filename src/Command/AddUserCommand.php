@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Helper\SymfonyQuestionHelper;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[AsCommand(
@@ -22,7 +23,7 @@ class AddUserCommand extends Command
 {
     private $entityManager;
 
-    public function __construct(private UserManager $userManager)
+    public function __construct()
     {
         parent::__construct();
     }
