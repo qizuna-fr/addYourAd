@@ -9,12 +9,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardController extends AbstractDashboardController
 {
-    #[Route('/', name: 'admin')]
+    #[Route('/admin', name: 'admin')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function index(): Response
     {
@@ -31,5 +32,12 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToCrud('Ads', 'fa-solid fa-rectangle-ad', Ad::class);
+    }
+
+    #[Route('/', name: 'rediect_admin')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function redirectAdmin()
+    {
+        return $this->redirectToRoute('admin');
     }
 }
