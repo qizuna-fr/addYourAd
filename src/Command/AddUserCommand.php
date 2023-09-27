@@ -15,28 +15,27 @@ use Symfony\Component\Console\Helper\SymfonyQuestionHelper;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-#[AsCommand(
-    name: 'app:add-user',
-    description: 'Add a short description for your command',
-)]
 class AddUserCommand extends Command
 {
     private $entityManager;
+    private $passwordHasher;
 
-    public function __construct()
+    public function __construct(EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasherInterface)
     {
+        $this->entityManager = $em;
+        $this->passwordHasher = $passwordHasherInterface;
         parent::__construct();
     }
 
     protected function configure(): void
     {
         $this
-            ->addArgument('email', InputArgument::REQUIRED, 'your Email :')
-            ->addArgument('password', InputArgument::REQUIRED, 'your Password :')
+            ->setName('app:add-user') // Définissez ici le nom de la commande
+            ->setDescription('Add a new user')
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output, UserPasswordHasherInterface $passwordHasher): int
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $helper = $this->getHelper('question');
 
@@ -51,10 +50,7 @@ class AddUserCommand extends Command
         // Create and persist the user
         $user = new User();
         $user->setEmail($email);
-        $user->setPassword($passwordHasher->hashPassword(
-            $user,
-            $password
-        ));
+        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
