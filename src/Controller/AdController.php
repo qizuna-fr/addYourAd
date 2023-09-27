@@ -151,16 +151,16 @@ class AdController extends AbstractController
 //            'ads' => $ads,
 //        ]);
 //    }
-        if ($ad === null){
-            return new Response(null, Response::HTTP_NOT_FOUND );
-        }
+    //     if ($ad === null){
+    //         return new Response(null, Response::HTTP_NOT_FOUND );
+    //     }
 
-        $ad->oneMoreClick();
-        $entityManager->persist($ad);
-        $entityManager->flush();
+    //     $ad->oneMoreClick();
+    //     $entityManager->persist($ad);
+    //     $entityManager->flush();
 
-        return new RedirectResponse($ad->getLink());
-    }
+    //     return new RedirectResponse($ad->getLink());
+    // }
 
 //    #[Route('/ad', name: 'app_ad')]
 //    public function index(AdRepository $adRepository): Response
