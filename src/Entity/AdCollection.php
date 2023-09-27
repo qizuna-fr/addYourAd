@@ -68,8 +68,7 @@ class AdCollection
             $ad->actualViewInTotalView();
             return $ad;
         } else {
-            $this->displayOneRandomly();
-            return $ad;
+            return $this->displayOneRandomly();
         }
     }
 

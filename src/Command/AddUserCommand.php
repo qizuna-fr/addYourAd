@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Entity\User;
-use App\Service\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -13,7 +12,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Helper\SymfonyQuestionHelper;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[AsCommand(
@@ -22,30 +20,46 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 )]
 class AddUserCommand extends Command
 {
-    // private $entityManager;
-    // private $passwordEncoder;
+    private $entityManager;
 
-    // public function __construct(private UserManager $userManager)
-    // {
-    //     parent::__construct();
-    // }
+    public function __construct(private UserManager $userManager)
+    {
+        parent::__construct();
+    }
 
-    // protected function configure(): void
-    // {
-    //     $this
-    //         ->setName('app:add-user')
-    //         ->setDescription('Add a new user')
-    //         ->addArgument('email', InputArgument::REQUIRED, 'your Email :')
-    //         ->addArgument('password', InputArgument::REQUIRED, 'your Password :')
-    //     ;
-    // }
+    protected function configure(): void
+    {
+        $this
+            ->addArgument('email', InputArgument::REQUIRED, 'your Email :')
+            ->addArgument('password', InputArgument::REQUIRED, 'your Password :')
+        ;
+    }
 
-    // protected function execute(InputInterface $input, OutputInterface $output, UserPasswordHasherInterface $passwordHasher): int
-    // {
-    //     $this->userManager->create($input->getArgument('email'), $input->getArgument('password'), $passwordHasher);
+    protected function execute(InputInterface $input, OutputInterface $output, UserPasswordHasherInterface $passwordHasher): int
+    {
+        $helper = $this->getHelper('question');
 
-    //     $output->writeln('User added successfully.');
+        $emailQuestion = new Question('Enter email: ');
+        $email = $helper->ask($input, $output, $emailQuestion);
 
-    //     return Command::SUCCESS;
-    // }
+        $passwordQuestion = new Question('Enter password: ');
+        $passwordQuestion->setHidden(true);
+        $passwordQuestion->setHiddenFallback(false);
+        $password = $helper->ask($input, $output, $passwordQuestion);
+
+        // Create and persist the user
+        $user = new User();
+        $user->setEmail($email);
+        $user->setPassword($passwordHasher->hashPassword(
+            $user,
+            $password
+        ));
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $output->writeln('User added successfully.');
+
+        return Command::SUCCESS;
+    }
 }
