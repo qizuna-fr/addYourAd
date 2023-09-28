@@ -45,78 +45,23 @@ class AdController extends AbstractController
                         UrlGeneratorInterface::ABSOLUTE_URL
                     ),
                 ],
-            ], Response::HTTP_OK
+            ],
+            Response::HTTP_OK
         );
     }
-
-
-//    #[Route('/ads/{id}', name: 'ad_ads')]
-//    public function getTheAd(Request $request, AdRepository $adRepository)
-//    {
-//        $ad = $adRepository->find($request->get('id'));
-//        return new JsonResponse(['url' => $ad->getImage(), 'lien' => $ad->getLink()], Response::HTTP_OK);
-//    }
-//    #[Route('/ads/{id}', name: 'ad_ads')]
-//    public function getTheAd(Request $request, AdRepository $adRepository)
-//    {
-//        $ad = $adRepository->find($request->get('id'));
-//        return new JsonResponse(['url' => $ad->getImage(), 'lien' => $ad->getLink()], Response::HTTP_OK);
-//    }
-
-//    #[Route('/link', name: 'image_link')]
-//    public function imageLink()
-//    {
-//        return new JsonResponse(['ad' => $this->renderView('api/link.html.twig', ['link' => 'lien', 'image' => 'img'])],
-//                                Response::HTTP_OK);
-//    }
-//    #[Route('/link', name: 'image_link')]
-//    public function imageLink()
-//    {
-//        return new JsonResponse(['ad' => $this->renderView('api/link.html.twig', ['link' => 'lien', 'image' => 'img'])],
-//                                Response::HTTP_OK);
-//    }
-
-//    #[Route('api/image/{id}', name: 'app_image')]
-//    public function image(Request $request, AdRepository $adRepository, ImageBuilder $imageBuilder)
-//    {
-//        $ad = $adRepository->find($request->get('id'));
-//        return new Response
-//        (
-//            file_get_contents($imageBuilder->makeImage($ad)),
-//            Response::HTTP_OK,
-//            [
-//                'Content-Type' => 'image/png',
-//            ]
-//        );
-//    }
-//    #[Route('api/image/{id}', name: 'app_image')]
-//    public function image(Request $request, AdRepository $adRepository, ImageBuilder $imageBuilder)
-//    {
-//        $ad = $adRepository->find($request->get('id'));
-//        return new Response
-//        (
-//            file_get_contents($imageBuilder->makeImage($ad)),
-//            Response::HTTP_OK,
-//            [
-//                'Content-Type' => 'image/png',
-//            ]
-//        );
-//    }
-
-    #[Route('/api/ad/image/{id}', name: 'app_base64' , schemes: ['https'])]
+    #[Route('/api/ad/image/{id}', name: 'app_base64', schemes: ['https'])]
     public function base64(Request $request, AdRepository $adRepository, ImageBuilder $imageBuilder)
     {
         $ad = $adRepository->find($request->get('id'));
-        if ($ad === null){
-            return new Response(null, Response::HTTP_NOT_FOUND );
+        if ($ad === null) {
+            return new Response(null, Response::HTTP_NOT_FOUND);
         }
 
-        if ($ad === null){
-            return new Response(null, Response::HTTP_NOT_FOUND );
+        if ($ad === null) {
+            return new Response(null, Response::HTTP_NOT_FOUND);
         }
 
-        return new Response
-        (
+        return new Response(
             $imageBuilder->makeBase64ToImage($ad),
             Response::HTTP_OK,
             [
@@ -125,12 +70,12 @@ class AdController extends AbstractController
         );
     }
 
-    #[Route('api/ad/link/{id}', name: 'image_lien' , schemes: ['https'])]
+    #[Route('api/ad/link/{id}', name: 'image_lien', schemes: ['https'])]
     public function imageLien(Request $request, AdRepository $adRepository, EntityManagerInterface $entityManager)
     {
         $ad = $adRepository->find($request->get('id'));
-        if ($ad === null){
-            return new Response(null, Response::HTTP_NOT_FOUND );
+        if ($ad === null) {
+            return new Response(null, Response::HTTP_NOT_FOUND);
         }
 
         $ad->oneMoreClick();
@@ -139,32 +84,4 @@ class AdController extends AbstractController
 
         return new RedirectResponse($ad->getLink());
     }
-
-//    #[Route('/ad', name: 'app_ad')]
-//    public function index(AdRepository $adRepository): Response
-//    {
-//        $ads = $adRepository->findAll();
-//        return $this->render('ad/index.html.twig', [
-//            'ads' => $ads,
-//        ]);
-//    }
-    //     if ($ad === null){
-    //         return new Response(null, Response::HTTP_NOT_FOUND );
-    //     }
-
-    //     $ad->oneMoreClick();
-    //     $entityManager->persist($ad);
-    //     $entityManager->flush();
-
-    //     return new RedirectResponse($ad->getLink());
-    // }
-
-//    #[Route('/ad', name: 'app_ad')]
-//    public function index(AdRepository $adRepository): Response
-//    {
-//        $ads = $adRepository->findAll();
-//        return $this->render('ad/index.html.twig', [
-//            'ads' => $ads,
-//        ]);
-//    }
 }

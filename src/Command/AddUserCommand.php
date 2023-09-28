@@ -40,12 +40,10 @@ class AddUserCommand extends Command
         $helper = $this->getHelper('question');
 
         $emailQuestion = new Question('Enter email: ');
-        $email = $helper->ask($input, $output, $emailQuestion);
 
         $passwordQuestion = new Question('Enter password: ');
         $passwordQuestion->setHidden(true);
         $passwordQuestion->setHiddenFallback(false);
-        $password = $helper->ask($input, $output, $passwordQuestion);
 
         // Create and persist the user
         $user = new User();

@@ -21,7 +21,6 @@ class AdCollection
     public function __construct()
     {
         $this->ads = new ArrayCollection();
-        // $this->boucle = 1;
     }
 
     public function getId(): ?int
@@ -63,6 +62,7 @@ class AdCollection
                 $anAd->setViewToZero();
             }
         }
+
         if ($ad->isDisplayable()) {
             $ad->oneMoreView();
             $ad->actualViewInTotalView();
