@@ -36,7 +36,7 @@ class DashboardController extends AbstractDashboardController
 
     #[Route('/', name: 'rediect_admin')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function redirectAdmin()
+    public function redirectAdmin(): Response
     {
         return $this->redirectToRoute('admin');
     }

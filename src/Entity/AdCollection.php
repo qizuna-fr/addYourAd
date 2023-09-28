@@ -52,7 +52,7 @@ class AdCollection
         return $this;
     }
 
-    public function displayOneRandomly()
+    public function displayOneRandomly(): Ad
     {
 
         $ad = $this->pickAdRandomly();
@@ -72,7 +72,7 @@ class AdCollection
         }
     }
 
-    public function getSequence()
+    public function getSequence(): array
     {
 
         $sequence = [];
@@ -84,7 +84,7 @@ class AdCollection
         return $sequence;
     }
 
-    public function allViews()
+    public function allViews(): int
     {
 
         $views = 0;
@@ -94,7 +94,7 @@ class AdCollection
         return $views;
     }
 
-    public function allWeight()
+    public function allWeight(): int
     {
 
         $weight = 0;
@@ -104,12 +104,12 @@ class AdCollection
         return $weight;
     }
 
-    public function aSegmentDone()
+    public function aSegmentDone(): bool
     {
         return $this->allViews() == $this->allWeight();
     }
 
-    public function pickAdRandomly()
+    public function pickAdRandomly(): Ad
     {
         $rnd = rand(0, count($this->ads) - 1);
 

@@ -76,6 +76,8 @@ class Ad
     #[ORM\Column]
     private ?int $click = null;
 
+    private bool $dateCorrect = true;
+
     public function __construct()
     {
         $this->views = 0;
@@ -96,9 +98,20 @@ class Ad
 
     public function setStartedAt(\DateTimeImmutable $startedAt): static
     {
-        $this->startedAt = $this->setNull($startedAt, $this->ifSetableAt($startedAt, $this->getEndedAt()));
+        $this->ifSetableAt($startedAt, $this->getEndedAt());
 
-        return $this;
+        if($this->dateCorrect == true)
+        {
+            $this->startedAt = $startedAt;
+
+            return $this;
+        }
+        else
+        {
+            $this->dateCorrect = true;
+
+            return $this;
+        }
     }
 
     public function getEndedAt(): ?\DateTimeImmutable
@@ -109,9 +122,20 @@ class Ad
 
     public function setEndedAt(\DateTimeImmutable $endedAt): static
     {
-        $this->endedAt = $this->setNull($endedAt, $this->ifSetableAt($this->getStartedAt(), $endedAt));
+        $this->ifSetableAt($this->getStartedAt(), $endedAt);
 
-        return $this;
+        if($this->dateCorrect == true)
+        {
+            $this->endedAt = $endedAt;
+
+            return $this;
+        }
+        else
+        {
+            $this->dateCorrect = true;
+
+            return $this;
+        }
     }
 
     public function getWeight(): ?int
@@ -235,48 +259,43 @@ class Ad
         return $this;
     }
 
-    public function ifSetableAt(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null)
+    public function ifSetableAt(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null): void
     {
         if ($end != null && $start != null && $end < $start) {
-            return false;
+            $this->dateCorrect = false;
         }
-        return true;
+        else
+        {
+            $this->dateCorrect = true;
+        }
     }
 
-    public function setNull(\DateTimeImmutable $date, $test = true)
-    {
-        if ($test == false) {
-            $date = null;
-        }
-        return $date;
-    }
-
-    public function oneMoreView()
+    public function oneMoreView(): void
     {
         $this->views++;
     }
 
-    public function actualViewInTotalView()
+    public function actualViewInTotalView(): void
     {
         $this->totalViews += $this->views;
     }
 
-    public function setViewToZero()
+    public function setViewToZero(): void
     {
         $this->views = 0;
     }
 
-    public function isDisplayable()
+    public function isDisplayable(): bool
     {
         return $this->views < $this->weight;
     }
 
-    public function imageToBase64(?File $imageFile = null)
+    public function imageToBase64(?File $imageFile = null): void
     {
         $this->setImageBase64(base64_encode(file_get_contents($imageFile)));
     }
 
-    public function oneMoreClick()
+    public function oneMoreClick():void
     {
         $this->click++;
     }
