@@ -2,9 +2,15 @@
 
 namespace App\Service;
 
+use App\Entity\Ad;
+
 class JsonBuilder
 {
-    public function stockData(?array $ads)
+    /**
+     * @param Ad[]|null $ads
+     * @return array<string, string>[]
+     */
+    public function stockData(?array $ads): array
     {
         $datas = [];
         foreach ($ads as $ad) {

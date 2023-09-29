@@ -72,12 +72,15 @@ class AdCollection
         }
     }
 
-    public function getSequence(): array
+    /**
+     * @return Ad[]
+     */
+    public function getSequence()
     {
-
         $sequence = [];
-        foreach ($this->ads as $ad) {
-            for ($i = 0; $i < $ad->getWeight(); $i++) {
+        $ads = $this->ads;
+        foreach ($ads as $ad) {
+            for($i = 0; $i < $ad->getWeight(); $i++) {
                 $sequence[] = $ad;
             }
         }

@@ -38,6 +38,10 @@ class AdRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @param int $value
+     * @return Ad[]
+     */
     public function findANumberOfAdsValideToday(int $value): array
     {
         $now = date('Y-m-d');
