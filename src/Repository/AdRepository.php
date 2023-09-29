@@ -38,7 +38,7 @@ class AdRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findANumberOfAdsValideToday($value): array
+    public function findANumberOfAdsValideToday(int $value): array
     {
         $now = date('Y-m-d');
         return $this->createQueryBuilder('a')
