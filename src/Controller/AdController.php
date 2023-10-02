@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Log;
 use App\Entity\AdCollection;
 use App\Service\JsonBuilder;
 use App\Service\ImageBuilder;
@@ -23,14 +24,23 @@ class AdController extends AbstractController
         AdRepository $adRepository,
         EntityManagerInterface $entityManager
     ):JsonResponse {
+
         $ads = $adRepository->findAll();
         $collection = new AdCollection();
         foreach ($ads as $ad) {
             $collection->addAd($ad);
         }
         $show = $collection->displayOneRandomly();
+
         $entityManager->persist($show);
         $entityManager->flush();
+
+        $log = new Log();
+        $log->setSeen();
+
+        $entityManager->persist($log);
+        $entityManager->flush();
+
         return new JsonResponse(
             [
                 'ad' => [
@@ -76,6 +86,12 @@ class AdController extends AbstractController
 
         $ad->oneMoreClick();
         $entityManager->persist($ad);
+        $entityManager->flush();
+
+        $log = new Log();
+        $log->setClick();
+
+        $entityManager->persist($log);
         $entityManager->flush();
 
         return new RedirectResponse($ad->getLink());
