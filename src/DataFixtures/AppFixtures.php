@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Ad;
+use App\Entity\Log;
 use DateTimeImmutable;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -20,8 +21,8 @@ class AppFixtures extends Fixture
             $ad->setStartedAt(new DateTimeImmutable('2023-07-30'));
             $ad->setEndedAt(new DateTimeImmutable('2023-08-30'));
             $ad->setUpdatedAt(new DateTimeImmutable('2023-09-13 09:14:24'));
-            $ad->setImage('market-651188f45e613675188362.png');
-            $ad->setImageFile(new File('public/img/uploads/market-651188f45e613675188362.png'));
+            $ad->setImage('montain-651287f630f3a193737599.png');
+            $ad->setImageFile(new File('public/img/uploads/montain-651287f630f3a193737599.png'));
             // dd($ad);1
 
             $manager->persist($ad);
@@ -35,8 +36,8 @@ class AppFixtures extends Fixture
             $ad->setStartedAt(new DateTimeImmutable('2023-08-31'));
             $ad->setEndedAt(new DateTimeImmutable('2023-10-31'));
             $ad->setUpdatedAt(new DateTimeImmutable('2023-09-13 09:14:24'));
-            $ad->setImage('market-651188f45e613675188362.png');
-            $ad->setImageFile(new File('public/img/uploads/market-651188f45e613675188362.png'));
+            $ad->setImage('fisherman-6512884e3bae1461386075.png');
+            $ad->setImageFile(new File('public/img/uploads/fisherman-6512884e3bae1461386075.png'));
 
             $manager->persist($ad);
             $manager->flush();
@@ -49,10 +50,26 @@ class AppFixtures extends Fixture
             $ad->setStartedAt(new DateTimeImmutable('2023-10-30'));
             $ad->setEndedAt(new DateTimeImmutable('2023-11-30'));
             $ad->setUpdatedAt(new DateTimeImmutable('2023-09-13 09:14:24'));
-            $ad->setImage('market-651188f45e613675188362.png');
-            $ad->setImageFile(new File('public/img/uploads/market-651188f45e613675188362.png'));
+            $ad->setImage('coffee-651196886336d135247029.png');
+            $ad->setImageFile(new File('public/img/uploads/coffee-651196886336d135247029.png'));
 
             $manager->persist($ad);
+            $manager->flush();
+        }
+        for ($count = 0; $count < 5; $count++) {
+            $log = new Log();
+
+            $log->setSeen();
+
+            $manager->persist($log);
+            $manager->flush();
+        }
+        for ($count = 0; $count < 5; $count++) {
+            $log = new Log();
+
+            $log->setClick();
+
+            $manager->persist($log);
             $manager->flush();
         }
     }
