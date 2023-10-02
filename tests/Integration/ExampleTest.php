@@ -3,6 +3,7 @@
 use App\Entity\Ad;
 use Doctrine\ORM\EntityManager;
 use App\Repository\AdRepository;
+use App\Repository\LogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 it('should have 15 item from the query', function(){
@@ -52,4 +53,13 @@ it('it should have 16 item after added a new ad', function()
 
     expect($ads)->toHaveCount(15)
     ->and($ads2)->toHaveCount(16);
+});
+
+it('should have 10 logs the query', function(){
+    
+    $logRepository = $this->container->get(LogRepository::class);
+    // $manager = $this->container->get('doctrine.orm.default_entity_manager');
+
+    $logs = $logRepository->findAllLogs();
+    expect($logs)->toHaveCount(10);
 });
