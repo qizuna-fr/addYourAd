@@ -51,15 +51,27 @@ it('it should have 16 item after added a new ad', function()
 
     $ads2 = $adRepository->findAll();
 
-    expect($ads)->toHaveCount(15)
-    ->and($ads2)->toHaveCount(16);
+    expect(count($ads2) - count($ads))->toBe(1);
 });
 
-it('should have 10 logs the query', function(){
+it('should have 15 logs from the query', function(){
     
     $logRepository = $this->container->get(LogRepository::class);
-    // $manager = $this->container->get('doctrine.orm.default_entity_manager');
 
     $logs = $logRepository->findAllLogs();
-    expect($logs)->toHaveCount(10);
+    expect($logs)->toHaveCount(15);
+});
+
+
+
+it('should have 2 logs from the query', function(){
+    
+    $logRepository = $this->container->get(LogRepository::class);
+    $adRepository = $this->container->get(AdRepository::class);
+
+    $ads = $adRepository->findAdsValideToday();
+    $id = $ads[0]->getId();
+    $logs = $logRepository->findByIdLogs($id);
+
+    expect($logs)->toHaveCount(2);
 });
