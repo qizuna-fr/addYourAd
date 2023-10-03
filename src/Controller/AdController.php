@@ -23,8 +23,7 @@ class AdController extends AbstractController
         JsonBuilder $jsonBuilder,
         AdRepository $adRepository,
         EntityManagerInterface $entityManager
-    ):JsonResponse {
-
+    ): JsonResponse {
         $ads = $adRepository->findAll();
         $collection = new AdCollection();
         foreach ($ads as $ad) {
@@ -36,7 +35,7 @@ class AdController extends AbstractController
         $entityManager->flush();
 
         $log = new Log();
-        $log->setSeen();
+        $log->setSeen($show);
 
         $entityManager->persist($log);
         $entityManager->flush();
@@ -60,7 +59,7 @@ class AdController extends AbstractController
         );
     }
     #[Route('/api/ad/image/{id}', name: 'app_base64', schemes: ['https'])]
-    public function base64(Request $request, AdRepository $adRepository, ImageBuilder $imageBuilder):Response
+    public function base64(Request $request, AdRepository $adRepository, ImageBuilder $imageBuilder): Response
     {
         $ad = $adRepository->find($request->get('id'));
         if ($ad == null) {
@@ -77,8 +76,11 @@ class AdController extends AbstractController
     }
 
     #[Route('api/ad/link/{id}', name: 'image_lien', schemes: ['https'])]
-    public function imageLien(Request $request, AdRepository $adRepository, EntityManagerInterface $entityManager):Response
-    {
+    public function imageLien(
+        Request $request,
+        AdRepository $adRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
         $ad = $adRepository->find($request->get('id'));
         if ($ad === null) {
             return new Response(null, Response::HTTP_NOT_FOUND);
@@ -89,7 +91,7 @@ class AdController extends AbstractController
         $entityManager->flush();
 
         $log = new Log();
-        $log->setClick();
+        $log->setClick($ad);
 
         $entityManager->persist($log);
         $entityManager->flush();
