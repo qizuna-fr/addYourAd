@@ -24,12 +24,44 @@ class AdRepository extends ServiceEntityRepository
     /**
      * @return Ad[] Returns an array of Ad objects
      */
+    public function findAdsEndedBeforeToday(): array
+    {
+        $now = date('Y-m-d');
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.endedAt < :today')
+            ->setParameter('today', $now)
+            ->orderBy('a.totalViews / a.weight', 'ASC')
+            // to retrive the one that have the less view compared to their weight
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Ad[] Returns an array of Ad objects
+     */
     public function findAdsValideToday(): array
     {
         $now = date('Y-m-d');
         return $this->createQueryBuilder('a')
             ->andWhere('a.endedAt > :today')
             ->andWhere('a.startedAt < :today')
+            ->setParameter('today', $now)
+            ->orderBy('a.totalViews / a.weight', 'ASC')
+            // to retrive the one that have the less view compared to their weight
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Ad[] Returns an array of Ad objects
+     */
+    public function findAdsStartedAfterToday(): array
+    {
+        $now = date('Y-m-d');
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.startedAt > :today')
             ->setParameter('today', $now)
             ->orderBy('a.totalViews / a.weight', 'ASC')
             // to retrive the one that have the less view compared to their weight
