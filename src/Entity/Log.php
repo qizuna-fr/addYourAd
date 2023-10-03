@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Ad;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\LogRepository;
@@ -19,6 +20,10 @@ class Log
 
     #[ORM\Column]
     private ?\DateTimeImmutable $doneAt = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Ad $Ad = null;
 
     public function __construct()
     {
@@ -54,15 +59,29 @@ class Log
         return $this;
     }
 
-    public function setSeen(): static
+    public function getAd(): ?Ad
     {
+        return $this->Ad;
+    }
+
+    public function setAd(?Ad $Ad): static
+    {
+        $this->Ad = $Ad;
+
+        return $this;
+    }
+
+    public function setSeen(?Ad $Ad): static
+    {
+        $this->Ad = $Ad;
         $this->type = 'seen';
 
         return $this;
     }
 
-    public function setClick(): static
+    public function setClick(?Ad $Ad): static
     {
+        $this->Ad = $Ad;
         $this->type = 'clicked';
 
         return $this;
