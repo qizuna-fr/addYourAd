@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use InvalidArgumentException;
 use Doctrine\DBAL\Types\Types;
 use App\Repository\AdRepository;
@@ -78,11 +80,15 @@ class Ad
 
     private bool $dateCorrect = true;
 
+    #[ORM\OneToMany(mappedBy: 'Ad', targetEntity: Log::class, orphanRemoval: true)]
+    private Collection $logs;
+
     public function __construct()
     {
         $this->views = 0;
         $this->totalViews = 0;
         $this->click = 0;
+        $this->logs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -290,5 +296,35 @@ class Ad
     public function oneMoreClick(): void
     {
         $this->click++;
+    }
+
+    /**
+     * @return Collection<int, Log>
+     */
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    public function addLog(Log $log): static
+    {
+        if (!$this->logs->contains($log)) {
+            $this->logs->add($log);
+            $log->setAd($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLog(Log $log): static
+    {
+        if ($this->logs->removeElement($log)) {
+            // set the owning side to null (unless already changed)
+            if ($log->getAd() === $this) {
+                $log->setAd(null);
+            }
+        }
+
+        return $this;
     }
 }
