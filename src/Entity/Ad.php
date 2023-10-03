@@ -100,14 +100,11 @@ class Ad
     {
         $this->ifSetableAt($startedAt, $this->getEndedAt());
 
-        if($this->dateCorrect == true)
-        {
+        if ($this->dateCorrect == true) {
             $this->startedAt = $startedAt;
 
             return $this;
-        }
-        else
-        {
+        } else {
             $this->dateCorrect = true;
 
             return $this;
@@ -124,14 +121,11 @@ class Ad
     {
         $this->ifSetableAt($this->getStartedAt(), $endedAt);
 
-        if($this->dateCorrect == true)
-        {
+        if ($this->dateCorrect == true) {
             $this->endedAt = $endedAt;
 
             return $this;
-        }
-        else
-        {
+        } else {
             $this->dateCorrect = true;
 
             return $this;
@@ -263,9 +257,7 @@ class Ad
     {
         if ($end != null && $start != null && $end < $start) {
             $this->dateCorrect = false;
-        }
-        else
-        {
+        } else {
             $this->dateCorrect = true;
         }
     }
@@ -295,7 +287,7 @@ class Ad
         $this->setImageBase64(base64_encode(file_get_contents($imageFile)));
     }
 
-    public function oneMoreClick():void
+    public function oneMoreClick(): void
     {
         $this->click++;
     }

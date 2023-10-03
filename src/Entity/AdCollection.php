@@ -80,7 +80,7 @@ class AdCollection
         $sequence = [];
         $ads = $this->ads;
         foreach ($ads as $ad) {
-            for($i = 0; $i < $ad->getWeight(); $i++) {
+            for ($i = 0; $i < $ad->getWeight(); $i++) {
                 $sequence[] = $ad;
             }
         }
