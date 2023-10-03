@@ -120,15 +120,17 @@ class LogRepository extends ServiceEntityRepository
 
     /**
      * @param int $id
+     * @param DateTimeImmutable $minDate
+     * @param DateTimeImmutable $maxDate
      * @return Log[] Returns an array of Log objects
      */
     public function findByIdDateLogs(DateTimeImmutable $minDate, DateTimeImmutable $maxDate, int $id): array
     {
-        $sql = "SELECT l.* FROM log l WHERE l.date >= :min AND l.date <= : max AND l.ad_id = :id";
+        $sql = "SELECT l.* FROM log l WHERE l.done_at >= :min AND l.done_at <= :max AND l.ad_id = :id";
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
         $request = $connection->prepare($sql);
-        $result = $request->execute(['min' => $minDate, 'max' => $maxDate, 'id' => $id]);
+        $result = $request->execute(['min' => $minDate->format('Y-m-d H:i:s'), 'max' => $maxDate->format('Y-m-d H:i:s'), 'id' => $id]);
         return $result->fetchAll();
     }
 }
