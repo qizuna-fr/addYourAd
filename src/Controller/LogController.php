@@ -21,13 +21,13 @@ class LogController extends AbstractController
     {
         $today = new DateTimeImmutable();
         $newToday = $today->setTime((int) $today->format('H'), 0, 0);
-        $yesterday = $newToday->add(new DateInterval('P1D'));
-        $label = $labelBuilder->hoursLabelFromYesterday($yesterday);
+        $yesterday = $newToday->sub(new DateInterval('P1D'));
+        $label = $labelBuilder->hoursLabelFromYesterday($yesterday, $today);
         // dd($today->format('Y-m-d H:i:s'));
         $logs = $logRepository->findByIdDateLogs($yesterday->format('Y-m-d H:i:s'), $today->format('Y-m-d H:i:s'), (int) $request->get('id'));
         $dataS = $dataBuilder->filterLogType($logs, 'seen');
         $dataC = $dataBuilder->filterLogType($logs, 'clicked');
-        dd($logs);
+        // dd($logs);
         $dataSeen = $dataBuilder->dataPerHours($dataS, $yesterday);
         $dataClick = $dataBuilder->dataPerHours($dataC, $yesterday);
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
@@ -36,15 +36,16 @@ class LogController extends AbstractController
             'labels' => $label,
             'datasets' => [
                 [
+                    'type' => 'bar',
                     'label' => 'Seen',
-                    'backgroundColor' => 'rgb(255, 99, 132)',
-                    'borderColor' => 'rgb(255, 99, 132)',
+                    'backgroundColor' => '#009ee2',
+                    'borderColor' => '#009ee2',
                     'data' => $dataSeen,
                 ],
                 [
                     'label' => 'Click',
-                    'backgroundColor' => 'rgb(255, 99, 132)',
-                    'borderColor' => 'rgb(255, 99, 132)',
+                    'backgroundColor' => '#707070',
+                    'borderColor' => '#707070',
                     'data' => $dataClick,
                 ],
             ],
