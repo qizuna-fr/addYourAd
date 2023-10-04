@@ -7,21 +7,9 @@ use DateTimeImmutable;
 
 class DataBuilder
 {
-    public function separator(array $logs): array
+    public function filterLogType(array $logs, string $type)
     {
-        $data = ['seen' => [], 'click' => []];
-        foreach($logs as $log)
-        {
-            if($log->getType() == 'seen')
-            {
-                $data['seen'][] = $log;
-            }
-            else
-            {
-                $data['click'][] = $log;
-            }
-        }
-        return $data;
+        return array_filter($logs, fn($log) => $log['type'] == $type);
     }
 
     public function dataPerHours(array $logs, DateTimeImmutable $date): array
