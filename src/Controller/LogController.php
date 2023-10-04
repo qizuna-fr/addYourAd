@@ -36,17 +36,17 @@ class LogController extends AbstractController
             'labels' => $label,
             'datasets' => [
                 [
+                    'label' => 'Click',
+                    'backgroundColor' => '#707070',
+                    'borderColor' => '#707070',
+                    'data' => $dataClick,
+                ],
+                [
                     'type' => 'bar',
                     'label' => 'Seen',
                     'backgroundColor' => '#009ee2',
                     'borderColor' => '#009ee2',
                     'data' => $dataSeen,
-                ],
-                [
-                    'label' => 'Click',
-                    'backgroundColor' => '#707070',
-                    'borderColor' => '#707070',
-                    'data' => $dataClick,
                 ],
             ],
         ]);
