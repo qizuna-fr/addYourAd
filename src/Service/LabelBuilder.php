@@ -7,7 +7,7 @@ use DateTimeImmutable;
 
 class LabelBuilder
 {
-    public function hoursLabelFromYesterday(DateTimeImmutable $date): array
+    public function hoursLabelFromYesterday(DateTimeImmutable $date, DateTimeImmutable $today): array
     {
         $hours = (int) $date->format('H');
         $label = [$hours];
@@ -18,6 +18,10 @@ class LabelBuilder
             if($hours == 24)
             {
                 $hours = 0;
+            }
+            if($i == 24)
+            {
+                $hours .= ' ('.$today->format('H:i').')';
             }
             $label[] = $hours;
         }
