@@ -23,11 +23,13 @@ class LogController extends AbstractController
         $newToday = $today->setTime((int) $today->format('H'), 0, 0);
         $yesterday = $newToday->add(new DateInterval('P1D'));
         $label = $labelBuilder->hoursLabelFromYesterday($yesterday);
-        $logs = $logRepository->findByIdDateLogs($yesterday, $today, (int) $request->get('id'));
-        $data = $dataBuilder->separator($logs);
-        dd($label);
-        $dataSeen = $dataBuilder->dataPerHours($data['seen'], $yesterday);
-        $dataClick = $dataBuilder->dataPerHours($data['click'], $yesterday);
+        // dd($today->format('Y-m-d H:i:s'));
+        $logs = $logRepository->findByIdDateLogs($yesterday->format('Y-m-d H:i:s'), $today->format('Y-m-d H:i:s'), (int) $request->get('id'));
+        $dataS = $dataBuilder->filterLogType($logs, 'seen');
+        $dataC = $dataBuilder->filterLogType($logs, 'clicked');
+        dd($logs);
+        $dataSeen = $dataBuilder->dataPerHours($dataS, $yesterday);
+        $dataClick = $dataBuilder->dataPerHours($dataC, $yesterday);
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
 
         $chart->setData([
