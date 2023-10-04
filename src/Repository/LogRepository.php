@@ -64,15 +64,17 @@ class LogRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param string $minDate
+     * @param string $maxDate
      * @return Log[] Returns an array of Log objects
      */
-    public function findDateLogs(DateTimeImmutable $minDate, DateTimeImmutable $maxDate): array
+    public function findDateLogs(string $min, string $max): array
     {
-        $sql = "SELECT l.* FROM log l WHERE l.date >= :min AND l.date <= : max";
+        $sql = "SELECT l.* FROM log l WHERE l.done_at BETWEEN :min AND :max";
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
         $request = $connection->prepare($sql);
-        $result = $request->execute(['min' => $minDate, 'max' => $maxDate]);
+        $result = $request->execute(['min' => $min, 'max' => $max]);
         return $result->fetchAll();
     }
 
@@ -120,17 +122,18 @@ class LogRepository extends ServiceEntityRepository
 
     /**
      * @param int $id
-     * @param DateTimeImmutable $minDate
-     * @param DateTimeImmutable $maxDate
+     * @param string $minDate
+     * @param string $maxDate
      * @return Log[] Returns an array of Log objects
      */
-    public function findByIdDateLogs(DateTimeImmutable $minDate, DateTimeImmutable $maxDate, int $id): array
+    public function findByIdDateLogs(string $minDate, string $maxDate, int $id): array
     {
-        $sql = "SELECT l.* FROM log l WHERE l.done_at >= :min AND l.done_at <= :max AND l.ad_id = :id";
+        $sql = "SELECT l.* FROM log l WHERE l.done_at BETWEEN :min AND :max AND l.ad_id = :id";
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
         $request = $connection->prepare($sql);
-        $result = $request->execute(['min' => $minDate->format('Y-m-d H:i:s'), 'max' => $maxDate->format('Y-m-d H:i:s'), 'id' => $id]);
+        $result = $request->execute(['min' => $minDate, 'max' => $maxDate, 'id' => $id]);
+        dd($result);
         return $result->fetchAll();
     }
 }
