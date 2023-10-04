@@ -128,12 +128,12 @@ class LogRepository extends ServiceEntityRepository
      */
     public function findByIdDateLogs(string $minDate, string $maxDate, int $id): array
     {
-        $sql = "SELECT l.* FROM log l WHERE l.done_at BETWEEN :min AND :max AND l.ad_id = :id";
+        $sql = "SELECT l.* FROM log l WHERE l.done_at BETWEEN :min AND :max AND l.ad_id = :id ORDER BY l.done_at";
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
         $request = $connection->prepare($sql);
         $result = $request->execute(['min' => $minDate, 'max' => $maxDate, 'id' => $id]);
-        dd($result);
+        // dd($result);
         return $result->fetchAll();
     }
 }
