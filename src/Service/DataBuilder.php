@@ -7,6 +7,9 @@ use DateTimeImmutable;
 
 class DataBuilder
 {
+    /**
+     * @param Log[] $logs
+     */
     public function filterLogType(array $logs, string $type)
     {
         return array_filter($logs, fn($log) => $log['type'] == $type);
@@ -38,5 +41,18 @@ class DataBuilder
             }
         }
         return $data;
+    }
+
+    /**
+     * @param Log[] $logs
+     */
+    public function oneAdLogForCSV(array $logs)
+    {
+        $content = [['type','doneAt']];
+        foreach($logs as $log)
+        {
+            $content[] = [$log['type'],$log['done_at']];
+        }
+        return $content;
     }
 }
