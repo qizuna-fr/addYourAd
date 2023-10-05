@@ -87,7 +87,7 @@ class LogController extends AbstractController
 
         $response = new Response();
         header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="log.csv"');
+        header('Content-Disposition: attachment; filename="log'.$request->get('id').'.csv"');
         header('Content-Length: ' . filesize($csvFile));
         readfile($csvFile);
 
@@ -119,7 +119,7 @@ class LogController extends AbstractController
 
         $response = new Response($xmlContent);
         $response->headers->set('Content-Type', 'text/xml');
-        $response->headers->set('Content-Disposition', 'attachment; filename="log.xml"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="log'.$request->get('id').'.xml"');
 
         return $response;
     }
