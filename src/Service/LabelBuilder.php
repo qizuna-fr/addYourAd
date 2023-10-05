@@ -12,14 +12,14 @@ class LabelBuilder
         $hours = (int) $date->format('H');
         $label = [$hours];
 
-        for($i = 0; $i < 25; $i++)
+        for($i = 0; $i < 24; $i++)
         {
             $hours++;
             if($hours == 24)
             {
                 $hours = 0;
             }
-            if($i == 24)
+            if($i == 23)
             {
                 $hours .= ' ('.$today->format('H:i').')';
             }
