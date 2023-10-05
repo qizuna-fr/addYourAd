@@ -20,6 +20,7 @@ class DataBuilder
      */
     public function dataPerHours(array $logs, DateTimeImmutable $date): array
     {
+        // TODO: faire en sorte d'envoyer 0 quand si il n'y a pas de log au heure envoyer (faire un for et non un foreach)
         $data = [];
         $i = 0;
         $hours = (int) $date->format('H');
