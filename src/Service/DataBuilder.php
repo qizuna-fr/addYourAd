@@ -37,7 +37,15 @@ class DataBuilder
             {
                 $data[] = $i;
                 $i = 0;
-                $hours = $logHours;
+                $hours++;
+                if($hours == 24)
+                {
+                    $hours = 0;
+                }
+                if($hours == $logHours)
+                {
+                    $i++;
+                }
             }
         }
         return $data;
