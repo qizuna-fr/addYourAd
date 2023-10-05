@@ -60,4 +60,16 @@ class DataBuilder
         }
         return $content;
     }
+
+    /**
+     * @param Log[] $logs
+     */
+    public function oneAdLogForXML(array $logs)
+    {
+        foreach($logs as $log)
+        {
+            $content[] = ['log' => ['type' => $log['type'], 'doneAt' => $log['done_at']]];
+        }
+        return $content;
+    }
 }
