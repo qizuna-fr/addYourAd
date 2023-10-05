@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateInterval;
+use SimpleXMLElement;
 use DateTimeImmutable;
 use App\Service\DataBuilder;
 use App\Service\LabelBuilder;
@@ -91,6 +92,34 @@ class LogController extends AbstractController
         readfile($csvFile);
 
         unlink($csvFile);
+
+        return $response;
+    }
+
+    #[Route('/log/xml/today/{id}', name: 'xml_log')]
+    public function logTodayXML(Request $request, LabelBuilder $labelBuilder, DataBuilder $dataBuilder, LogRepository $logRepository): Response
+    {
+        $today = new DateTimeImmutable();
+        $newToday = $today->setTime((int) $today->format('H'), 0, 0);
+        $yesterday = $newToday->sub(new DateInterval('P1D'));
+        $label = $labelBuilder->hoursLabelFromYesterday($yesterday, $today);
+        $logs = $logRepository->findByIdDateLogs($yesterday->format('Y-m-d H:i:s'), $today->format('Y-m-d H:i:s'), (int) $request->get('id'));
+        $data = $dataBuilder->oneAdLogForXML($logs);
+
+        // mettre le moyen de stocker $data dans un fichier xml
+
+        $xml = new SimpleXMLElement('<?xml version="1.0"?><data></data>');
+        foreach ($data as $item) {
+            $log = $xml->addChild('log');
+            foreach ($item['log'] as $key => $value) {
+                $log->addChild($key, htmlspecialchars("$value"));
+            }
+        }
+        $xmlContent = $xml->asXML();
+
+        $response = new Response($xmlContent);
+        $response->headers->set('Content-Type', 'text/xml');
+        $response->headers->set('Content-Disposition', 'attachment; filename="log.xml"');
 
         return $response;
     }
