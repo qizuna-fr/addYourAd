@@ -81,7 +81,7 @@ class LogController extends AbstractController
         $fileHandle = fopen($csvFile, 'w');
         // dd($data);
         foreach ($data as $row) {
-            fputcsv($fileHandle, $row);
+            fputcsv($fileHandle, $row, ';');
         }
         fclose($fileHandle);
 
