@@ -24,29 +24,51 @@ class DataBuilder
         $data = [];
         $i = 0;
         $hours = (int) $date->format('H');
-        foreach($logs as $log)
+        $day = (int) $date->format('d');
+        // foreach($logs as $log)
+        // {
+        //     $logHour = new DateTimeImmutable($log["done_at"]);
+        //     $logHours = (int) $logHour->format('H');
+        //     // dd((int) $logHour->format('H'));
+        //     // dd($logHours);
+        //     if($hours == $logHours)
+        //     {
+        //         $i++;
+        //     }
+        //     else
+        //     {
+        //         $data[] = $i;
+        //         $i = 0;
+        //         $hours++;
+        //         if($hours == 24)
+        //         {
+        //             $hours = 0;
+        //         }
+        //         if($hours == $logHours)
+        //         {
+        //             $i++;
+        //         }
+        //     }
+        // }
+        for($i = 0; $i < 25; $i++)
         {
-            $logHour = new DateTimeImmutable($log["done_at"]);
-            // dd((int) $logHour->format('H'));
-            $logHours = (int) $logHour->format('H');
-            // dd($logHours);
-            if($hours == $logHours)
+            $count = 0;
+            foreach($logs as $log)
             {
-                $i++;
+                $logDate = new DateTimeImmutable($log["done_at"]);
+                $logHours = (int) $logDate->format('H');
+                $logDay = (int) $logDate->format('d');
+                if($hours == $logHours && $day == $logDay)
+                {
+                    $count++;
+                }
             }
-            else
+            $data[] = $count;
+            $hours++;
+            if($hours == 24)
             {
-                $data[] = $i;
-                $i = 0;
-                $hours++;
-                if($hours == 24)
-                {
-                    $hours = 0;
-                }
-                if($hours == $logHours)
-                {
-                    $i++;
-                }
+                $hours = 0;
+                $day++;
             }
         }
         return $data;
