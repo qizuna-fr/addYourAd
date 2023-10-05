@@ -16,8 +16,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class LogController extends AbstractController
 {
-    #[Route('/log/today/{id}', name: 'app_log')]
-    public function index(Request $request, ChartBuilderInterface $chartBuilder, LabelBuilder $labelBuilder, DataBuilder $dataBuilder, LogRepository $logRepository): Response
+    #[Route('/log/charts/today/{id}', name: 'app_log')]
+    public function logTodayCharts(Request $request, ChartBuilderInterface $chartBuilder, LabelBuilder $labelBuilder, DataBuilder $dataBuilder, LogRepository $logRepository): Response
     {
         $today = new DateTimeImmutable();
         $newToday = $today->setTime((int) $today->format('H'), 0, 0);
@@ -62,5 +62,36 @@ class LogController extends AbstractController
         return $this->render('log/index.html.twig', [
             'chart' => $chart,
         ]);
+    }
+
+    #[Route('/log/csv/today/{id}', name: 'csv_log')]
+    public function logTodayCSV(Request $request, LabelBuilder $labelBuilder, DataBuilder $dataBuilder, LogRepository $logRepository): Response
+    {
+        $today = new DateTimeImmutable();
+        $newToday = $today->setTime((int) $today->format('H'), 0, 0);
+        $yesterday = $newToday->sub(new DateInterval('P1D'));
+        $label = $labelBuilder->hoursLabelFromYesterday($yesterday, $today);
+        $logs = $logRepository->findByIdDateLogs($yesterday->format('Y-m-d H:i:s'), $today->format('Y-m-d H:i:s'), (int) $request->get('id'));
+        $data = $dataBuilder->oneAdLogForCSV($logs);
+
+        // mettre le moyen de stocker $data dans un fichier csv
+
+        $csvFile = tempnam(sys_get_temp_dir(), 'log_') . '.csv';
+        $fileHandle = fopen($csvFile, 'w');
+        // dd($data);
+        foreach ($data as $row) {
+            fputcsv($fileHandle, $row);
+        }
+        fclose($fileHandle);
+
+        $response = new Response();
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="log.csv"');
+        header('Content-Length: ' . filesize($csvFile));
+        readfile($csvFile);
+
+        unlink($csvFile);
+
+        return $response;
     }
 }
