@@ -28,33 +28,52 @@ class LogController extends AbstractController
     private DataBuilder $dataBuilder;
     private LogBuilder $logBuilder;
     private DateBuilder $dateBuilder;
+    private LabelBuilder $labelBuilder;
+    private ChartsDataBuilder $chartsDataBuilder;
+    private ChartBuilderInterface $chartBuilder;
+    private Request $request;
 
-    public function __construct(AdRepository $adRepository, LogRepository $logRepository, DataBuilder $dataBuilder, LogBuilder $logBuilder, DateBuilder $dateBuilder)
+    public function __construct(
+        AdRepository $adRepository,
+        LogRepository $logRepository,
+        DataBuilder $dataBuilder,
+        LogBuilder $logBuilder,
+        DateBuilder $dateBuilder,
+        LabelBuilder $labelBuilder,
+        ChartsDataBuilder $chartsDataBuilder,
+        ChartBuilderInterface $chartBuilder,
+        )
     {
         $this->adRepository = $adRepository;
         $this->logRepository = $logRepository;
         $this->dataBuilder = $dataBuilder;
         $this->dateBuilder = $dateBuilder;
         $this->logBuilder = $logBuilder;
+        $this->labelBuilder = $labelBuilder;
+        $this->chartsDataBuilder = $chartsDataBuilder;
+        $this->chartBuilder = $chartBuilder;
     }
 
     #[Route('/log/charts/today/{id}/', name: 'charts_today_log')]
-    public function logTodayCharts(Request $request, ChartBuilderInterface $chartBuilder, LabelBuilder $labelBuilder, ChartsDataBuilder $chartsDataBuilder): Response
+    public function logTodayCharts(Request $request): Response
     {
         $today = new DateTimeImmutable();
         $newToday = $today->setTime((int) $today->format('H'), 0, 0);
         $yesterday = $newToday->sub(new DateInterval('P1D'));
-        $label = $labelBuilder->hoursLabelFromYesterday($yesterday, $today);
+        $label = $this->labelBuilder->hoursLabelFromYesterday($yesterday, $today);
         // dd($today->format('Y-m-d H:i:s'));
         $logs = $this->logRepository->findByIdDateLogs($yesterday->format('Y-m-d H:i:s'), $today->format('Y-m-d H:i:s'), (int) $request->get('id'));
         // dd($logs);
         $dataSeen = $this->dataBuilder->dataPerHours($this->dataBuilder->filterLogType($logs, 'seen'), $yesterday);
         $dataClick = $this->dataBuilder->dataPerHours($this->dataBuilder->filterLogType($logs, 'clicked'), $yesterday);
-        $chart = $chartsDataBuilder->makeChartsData($label, $dataClick, $dataSeen, $chartBuilder);
+        $chart = $this->chartsDataBuilder->makeChartsData($label, $dataClick, $dataSeen, $this->chartBuilder);
         return $this->render('log/index.html.twig', [
             'chart' => $chart,
         ]);
     }
+
+    // #[Route('/log/charts/all/{id}/', name: 'charts_all_log')]
+    // public function logTodayCharts(Request $request): Response
 
     #[Route('/log/csv/all/{id}', name: 'csv_all_log')]
     public function logAllCSV(Request $request, SendCSV $sendCSV): Response
