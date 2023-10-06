@@ -47,29 +47,4 @@ class DataBuilder
         }
         return $data;
     }
-
-    /**
-     * @param Log[] $logs
-     */
-    public function oneAdLogForCSV(array $logs)
-    {
-        $content = [['type','doneAt']];
-        foreach($logs as $log)
-        {
-            $content[] = [$log['type'],$log['done_at']];
-        }
-        return $content;
-    }
-
-    /**
-     * @param Log[] $logs
-     */
-    public function oneAdLogForXML(array $logs)
-    {
-        foreach($logs as $log)
-        {
-            $content[] = ['log' => ['type' => $log['type'], 'doneAt' => $log['done_at']]];
-        }
-        return $content;
-    }
 }
