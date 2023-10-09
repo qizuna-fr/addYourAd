@@ -28,4 +28,16 @@ class LabelBuilder
 
         return $label;
     }
+
+    public function hoursLabelForAll(): array
+    {
+        $label = [0];
+
+        for($i = 1; $i < 24; $i++)
+        {
+            $label[] = $i;
+        }
+
+        return $label;
+    }
 }
