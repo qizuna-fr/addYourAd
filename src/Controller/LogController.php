@@ -61,9 +61,7 @@ class LogController extends AbstractController
         $newToday = $today->setTime((int) $today->format('H'), 0, 0);
         $yesterday = $newToday->sub(new DateInterval('P1D'));
         $label = $this->labelBuilder->hoursLabelFromYesterday($yesterday, $today);
-        // dd($today->format('Y-m-d H:i:s'));
         $logs = $this->logRepository->findByIdDateLogs($yesterday->format('Y-m-d H:i:s'), $today->format('Y-m-d H:i:s'), (int) $request->get('id'));
-        // dd($logs);
         $dataSeen = $this->dataBuilder->dataPerHours($this->dataBuilder->filterLogType($logs, 'seen'), $yesterday);
         $dataClick = $this->dataBuilder->dataPerHours($this->dataBuilder->filterLogType($logs, 'clicked'), $yesterday);
         $chart = $this->chartsDataBuilder->makeChartsData($label, $dataClick, $dataSeen, $this->chartBuilder);
@@ -72,8 +70,19 @@ class LogController extends AbstractController
         ]);
     }
 
-    // #[Route('/log/charts/all/{id}/', name: 'charts_all_log')]
-    // public function logTodayCharts(Request $request): Response
+    #[Route('/log/charts/all/{id}/', name: 'charts_all_log')]
+    public function logAllCharts(Request $request): Response
+    {
+        $label = $this->labelBuilder->hoursLabelForAll();
+        $logs = $this->logRepository->findByIdLogs((int) $request->get('id'));
+        $dataSeen = $this->dataBuilder->allDataPerHours($this->dataBuilder->filterLogType($logs, 'seen'));
+        // dd($dataSeen);
+        $dataClick = $this->dataBuilder->allDataPerHours($this->dataBuilder->filterLogType($logs, 'clicked'));
+        $chart = $this->chartsDataBuilder->makeChartsData($label, $dataClick, $dataSeen, $this->chartBuilder);
+        return $this->render('log/index.html.twig', [
+            'chart' => $chart,
+        ]);
+    }
 
     #[Route('/log/csv/all/{id}', name: 'csv_all_log')]
     public function logAllCSV(Request $request, SendCSV $sendCSV): Response
