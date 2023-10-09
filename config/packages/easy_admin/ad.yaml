@@ -1,0 +1,6 @@
+easy_admin:
+    entities:
+        Ad:
+            class: App\Entity\Ad
+            edit:
+                templatePath: 'templates/ad/index.html.twig'
