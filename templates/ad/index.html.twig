@@ -1,20 +1,12 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Hello AdController!{% endblock %}
+{% extends '@EasyAdmin/default/edit.html.twig' %}
 
 {% block body %}
-    {% for ad in ads %}
-        {% set weight = ad.weight %}
-        {% if weight == 1 %}
-                <figure>
-                    <img src="{{ asset('img/uploads/') }}{{ ad.image }}" alt="">
-                </figure>
-        {% else %}
-            {% for i in 1 .. weight %}
-                <figure>
-                    <img src="{{ asset('img/uploads/') }}{{ ad.image }}" alt="">
-                </figure>
-            {% endfor %}
-        {% endif %}
-    {% endfor %}
+    <h1>Edit Ad</h1>
+
+    {{ parent() }}
+
+    <div class="container flex-fill">
+        {{ render(controller('App\\Controller\\LogController::logTodayCharts', { 'id': ea_crud.id })) }}
+        {{ render(controller('App\\Controller\\LogController::logAllCharts', { 'id': ea_crud.id })) }}
+    </div>
 {% endblock %}
