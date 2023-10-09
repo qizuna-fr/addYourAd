@@ -65,8 +65,8 @@ class LogController extends AbstractController
         $dataSeen = $this->dataBuilder->dataPerHours($this->dataBuilder->filterLogType($logs, 'seen'), $yesterday);
         $dataClick = $this->dataBuilder->dataPerHours($this->dataBuilder->filterLogType($logs, 'clicked'), $yesterday);
         $chart = $this->chartsDataBuilder->makeChartsData($label, $dataClick, $dataSeen, $this->chartBuilder);
-        return $this->render('log/index.html.twig', [
-            'chart' => $chart,
+        return $this->render('log/today.html.twig', [
+            'todayChart' => $chart,
         ]);
     }
 
@@ -79,8 +79,8 @@ class LogController extends AbstractController
         // dd($dataSeen);
         $dataClick = $this->dataBuilder->allDataPerHours($this->dataBuilder->filterLogType($logs, 'clicked'));
         $chart = $this->chartsDataBuilder->makeChartsData($label, $dataClick, $dataSeen, $this->chartBuilder);
-        return $this->render('log/index.html.twig', [
-            'chart' => $chart,
+        return $this->render('log/all.html.twig', [
+            'allChart' => $chart,
         ]);
     }
 
