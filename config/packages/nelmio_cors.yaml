@@ -15,7 +15,7 @@ nelmio_cors:
       allow_origin: [ '*' ]
       allow_headers: [ 'X-Custom-Auth', 'Origin', 'Content-Type', 'Accept' ]
       allow_methods: [ 'POST', 'PUT', 'GET', 'DELETE', 'PATCH', 'OPTIONS' ]
-      max_age: 3600
+      max_age: 0
       # This may not be needed ?
       forced_allow_origin_value: '*'
 
