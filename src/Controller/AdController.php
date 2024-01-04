@@ -55,7 +55,8 @@ class AdController extends AbstractController
                     ),
                 ],
             ],
-            Response::HTTP_OK
+            Response::HTTP_OK,
+            ['Access-Control-Allow-Origin' => '*']
         );
     }
     #[Route('/api/ad/image/{id}', name: 'app_base64', schemes: ['https'])]
