@@ -18,6 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdController extends AbstractController
 {
+    #[Route('/api/test', name: 'app_test')]
+    public function test()
+    {
+        return new JsonResponse(['test' => 'test']);
+    }
+
     #[Route('/api/ad/random', name: 'app_random')]
     public function randomAds(
         JsonBuilder $jsonBuilder,
@@ -55,13 +61,10 @@ class AdController extends AbstractController
                     ),
                 ],
             ],
-            Response::HTTP_OK,
-            [
-                'Access-Control-Allow-Origin' => '*',
-                'Access-Control-Allow-Headers' =>  '*'
-            ]
+            Response::HTTP_OK
         );
     }
+
     #[Route('/api/ad/image/{id}', name: 'app_base64', schemes: ['https'])]
     public function base64(Request $request, AdRepository $adRepository, ImageBuilder $imageBuilder): Response
     {
